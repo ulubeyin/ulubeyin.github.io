@@ -1,6 +1,6 @@
 function baseState(tur, total, cooling) {
   return { t: 37.5, tt: 37.5, h: 55, th: 55, day: 1, total: total, hr: 0, tur: tur, clk: [9, 0], cooling: cooling, alarm: 0, off: false, status: "Gelişim devam ediyor",
-    out: { heater: true, circ: true, hum: false, pump: false, cool: false, viyol: true, light: false, siren: false } };
+    out: { heater: true, circ: true, hum: true, pump: false, cool: false, viyol: true, siren: false } };
 }
 
 /* Çıkışlar canlı gibi açılıp kapanır (görsel canlandırma) */
