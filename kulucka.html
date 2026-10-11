@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ULU BEYİN Kuluçka Kontrol Ünitesi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.5 14.9L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm0 18a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.1 8.1 0 1 1 12.04 20Zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1l-.8 1c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4a.8.8 0 0 0-.6.3 2.5 2.5 0 0 0-.8 1.9 4.4 4.4 0 0 0 .9 2.3 10 10 0 0 0 3.9 3.4c1.4.6 2 .6 2.7.5a2.3 2.3 0 0 0 1.5-1.1 1.9 1.9 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3Z"/></symbol>
+  <symbol id="i-mark" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13.5" fill="none" stroke="#fff" stroke-width="1.6" opacity=".55"/><path d="M5.5 22.5 12 10l4.6 7.2 3.2-4.6 6.7 9.9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="1.7" fill="#fff"/><circle cx="19.8" cy="12.6" r="1.7" fill="#fff"/></symbol>
+</svg>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="ULU BEYİN ana sayfa"><svg aria-hidden="true"><use href="#i-mark"/></svg><b>ULU BEYİN</b></a>
+    <nav class="nav" aria-label="Sayfa bölümleri">
+      <a class="l" href="index.html">Ana sayfa</a>
+      <a class="l" href="#ozellikler">Özellikler</a>
+      <a class="l" href="#fark">Fark</a>
+      <a class="l" href="#demo">Canlı demo</a>
+      <a class="btn wa sm" href="#siparis">Sipariş ver</a>
+    </nav>
+  </div>
+</header>
+
+<div id="top" class="wrap" style="position:relative">
+  <div class="heroback" aria-hidden="true">
+  <div class="heroback" aria-hidden="true">
+    <svg class="pulse" viewBox="0 0 1400 90" preserveAspectRatio="none">
+      <path class="base" d="M0 45 H300 l14 -4 l14 8 l16 -34 l16 62 l16 -44 l12 12 H700 l14 -4 l14 8 l16 -34 l16 62 l16 -44 l12 12 H1100 l14 -4 l14 8 l16 -34 l16 62 l16 -44 l12 12 H1400"/>
+      <path class="run" d="M0 45 H300 l14 -4 l14 8 l16 -34 l16 62 l16 -44 l12 12 H700 l14 -4 l14 8 l16 -34 l16 62 l16 -44 l12 12 H1100 l14 -4 l14 8 l16 -34 l16 62 l16 -44 l12 12 H1400"/>
+    </svg>
+  </div>  </div>
+  <div class="hero">
+    <div>
+      <span class="chip"><span class="dot"></span>Kuluçka Kontrol Ünitesi</span>
+      <h1>Kuluçkanın <em>yeni beyni.</em></h1>
+      <p class="lead">Standart cihaz sıcaklığı gösterir. ULU BEYİN kuluçkanın tamamını yönetir: sıcaklık, nem, soğutma, viyol, alarm ve güvenlik. Siz uyurken bile başında bekler, sorun çıkınca sizi arar.</p>
+      <div class="cta">
+        <a class="btn wa lg" href="#siparis">Sipariş ver</a>
+        <a class="btn s lg" href="#demo">Canlı demoyu dene</a>
+      </div>
+      <div class="mini"><span>Dokunmatik ekran</span><span>Telefondan uzaktan kontrol</span><span>Anında alarm</span><span>Kesintiye dayanıklı</span></div>
+    </div>
+    <div>
+      <div class="scr" id="scr-hero" aria-label="Cihaz ekranı"></div>
+      <p class="cap">Cihazın dokunmatik ekranı</p>
+    </div>
+  </div>
+</div>
+
+<div class="strip">
+  <div class="wrap">
+    <div><b>8</b><span>hazır tür programı</span></div>
+    <div><b>10</b><span>kontrol çıkışı</span></div>
+    <div><b>3</b><span>yetki seviyesi</span></div>
+    <div><b>7/24</b><span>uyanık koruma</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="ozellikler">
+    <div class="head">
+      <span class="eyebrow">ÖZELLİKLER</span>
+      <h2>Gece gündüz başında bekleyen bir göz.</h2>
+      <p>Kendi makinenize takılır. Isıtıcı, fan, nemlendirici, pompa, viyol ve ışık çıkışlarını sürer.</p>
+    </div>
+    <div class="feat">
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0Z"/><path d="M12 9v7"/></svg>
+        <h3>Hassas sıcaklık ve nem</h3><p>Sürekli ölçer, sürekli düzeltir. Isıtma yumuşak geçişlerle yapılır, makine ve yumurta ani sarsıntı görmez.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="18" height="8" rx="1.5"/></svg>
+        <h3>Çift bölgeli ısıtma</h3><p>Büyük kabinde her bölgeyi kendi sensörüyle ayrı yönetir. Bir bölge soğursa diğeri etkilenmez.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c3 4 6 6.5 6 10.5a6 6 0 0 1-12 0C6 9.5 9 7 12 3Z"/></svg>
+        <h3>Sekiz tür, hazır program</h3><p>Türü seçin, süre, sıcaklık ve nem ayarlanır. Çıkım döneminde cihaz kendisi uygun değerlere geçer.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8Z"/><path d="M10.3 20a2 2 0 0 0 3.4 0"/></svg>
+        <h3>Çok kademeli alarm</h3><p>Aşırı ısınma, soğuma, nem sapması, sensör ve ısıtıcı arızası. Her olay için sade ve net bir mesaj gelir.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <h3>Kendini koruyan sistem</h3><p>Tehlikeli bir durumda cihaz kendiliğinden güvenli önlem alır. Siz uzaktayken bile yumurtalar korunur.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 4 3 11l6 2.5L11.5 20 21 4Z"/><path d="M9 13.5 21 4"/></svg>
+        <h3>Telegram ile yönetim</h3><p>Durumu görün, komut verin, geçmişe bakın. Yönetici, yardımcı ve izleyici olarak üç ayrı yetki tanımlayın.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>
+        <h3>Elektrik kesintisine dayanıklı</h3><p>Kuluçka sıfırlanmaz. Elektrik gelince kesintinin süresi ve kabin sıcaklığı tek mesajla size bildirilir.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9"/></svg>
+        <h3>Soğutma ve sulama otomasyonu</h3><p>Kaz, ördek ve misk ördeği için günlük soğutma ve sulamayı otomatik yapar ya da manuel başlatmanıza izin verir.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M20 4v5h-5"/></svg>
+        <h3>Viyol yönetimi</h3><p>Yumurta çevirmeyi iki farklı viyol tipine göre yönetir, çıkıma yaklaşırken kendisi durdurur ve sizi uyarır.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
+        <h3>Kuluçka kaydı</h3><p>Her kuluçkanın özeti saklanır. Yumurta ve çıkan civciv sayısını girin, çıkım oranınızı görün.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <h3>Süre takibi</h3><p>Geçen ve kalan süreyi gün, saat ve dakika olarak ekranda ve Telegram'da görürsünüz.</p>
+      </div>
+      <div class="f">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="m5.6 5.6 3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/></svg>
+        <h3>Yanınızda destek</h3><p>Sorun olduğunda destek ekibine geçici erişim verirsiniz. Süre dolunca erişim kendiliğinden kapanır.</p>
+      </div>
+    </div>
+  </section>
+  <section id="fark">
+    <div class="head">
+      <span class="eyebrow">NEDEN ULU BEYİN</span>
+      <h2>Standart cihazda bir sayı var. Bizde bir sistem var.</h2>
+      <p>Piyasadaki klasik kontrol cihazı sıcaklığı ve nemi gösterir, gerisi size kalır. ULU BEYİN ise kuluçkayı baştan sona yönetir, her gelişmeyi size bildirir ve hata yapmanıza fırsat bırakmaz.</p>
+    </div>
+    <div class="cmp">
+      <table>
+        <thead><tr><th>ÖZELLİK</th><th>STANDART KONTROL CİHAZI</th><th class="u">ULU BEYİN</th></tr></thead>
+        <tbody><tr><td>Gösterdiği</td><td class="no">Sıcaklık ve nem sayısı</td><td class="yes">Sıcaklık, nem, kuluçka günü, geçen ve kalan süre, çalışan çıkışlar ve alarm durumu</td></tr><tr><td>Uzaktan izleme</td><td class="no">Yok</td><td class="yes">Telefondan, dünyanın her yerinden</td></tr><tr><td>Alarm</td><td class="no">Cihazın başında olmazsanız kimse duymaz</td><td class="yes">Telefonunuza anında mesaj, düzelmezse hatırlatma</td></tr><tr><td>Tür programı</td><td class="no">Sıcaklık ve nemi elle girersiniz</td><td class="yes">Sekiz tür hazır, türü seçmeniz yeter</td></tr><tr><td>Çıkım dönemi</td><td class="no">Değerleri zamanında kendiniz değiştirirsiniz</td><td class="yes">Cihaz kendisi çıkım değerlerine geçer, sizi bilgilendirir</td></tr><tr><td>Gün ve süre takibi</td><td class="no">Yok</td><td class="yes">Kuluçka günü, geçen ve kalan süre, çıkım zamanı</td></tr><tr><td>Soğutma ve sulama</td><td class="no">Yok</td><td class="yes">Kaz, ördek ve misk ördeği için otomatik ya da manuel</td></tr><tr><td>Viyol yönetimi</td><td class="no">Ayrı zamanlayıcı gerekir</td><td class="yes">Dahili, çıkıma yaklaşırken kendisi durur</td></tr><tr><td>Elektrik kesintisi</td><td class="no">Süreci sizin takip etmeniz gerekir</td><td class="yes">Kaldığı yerden devam, kesinti süresi ve kabin sıcaklığı mesajla gelir</td></tr><tr><td>Sensör</td><td class="no">Tek sensör, arızada kontrol bozulur</td><td class="yes">Bölgeleri ayrı sensörle izler, arızayı algılar ve bildirir</td></tr><tr><td>Aşırı ısınma koruması</td><td class="no">Sınırlı</td><td class="yes">Kademeli koruma: ısıtıcı kilidi, acil durum, güvenli mod</td></tr><tr><td>Arıza tespiti</td><td class="no">Yok</td><td class="yes">Isıtıcı, nemlendirici ve sensör arızasını kendisi bulur</td></tr><tr><td>Yetkilendirme</td><td class="no">Tuş kilidi</td><td class="yes">Yönetici, yardımcı ve izleyici yetkileri, kişi başına</td></tr><tr><td>Geçmiş ve kayıt</td><td class="no">Tutmaz</td><td class="yes">Olay geçmişi, kuluçka arşivi, çıkım oranı</td></tr><tr><td>Yazılım güncelleme</td><td class="no">Yok</td><td class="yes">Uzaktan, imzalı ve onayınızla, kuluçkayı bozmadan</td></tr><tr><td>Destek</td><td class="no">Telefonda tarifle</td><td class="yes">Sorunu cihaza bağlanıp sizinle birlikte çözer</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+  <section id="demo">
+    <div class="demo">
+      <div>
+        <span class="eyebrow">CANLI DEMO</span>
+        <h2 style="margin-top:14px">Cihaz nasıl davranır, görün.</h2>
+        <p style="margin-top:16px;color:var(--muted)">Bir tür seçin, zamanı ilerletin, olay oluşturun. Cihaz ekranı ve Telegram mesajları gerçek bir kuluçkadaki gibi tepki verir.</p>
+        <div class="sel" id="d-tur" role="group" aria-label="Tür seçimi"><span>TÜR</span>
+          <button type="button" data-t="Tavuk" data-n="21" class="on">🐔 Tavuk</button>
+          <button type="button" data-t="Kaz" data-n="30">🪿 Kaz</button>
+          <button type="button" data-t="Misk ördeği" data-n="35">🦆 Misk ördeği</button>
+        </div>
+        <div style="margin-top:20px"><div class="scr" id="scr-demo" aria-label="Demo ekranı"></div></div>
+        <div class="grp"><small>ZAMAN</small><div class="ctl"><button class="p" id="d-gun" type="button">Bir gün ilerlet</button><button id="d-sifir" type="button">Baştan başla</button></div></div>
+        <div class="grp"><small>OLAYLAR</small><div class="ctl">
+          <button id="d-kapi" type="button">Kapıyı aç</button>
+          <button id="d-elk" type="button">Elektriği kes</button>
+          <button id="d-nem" type="button">Nem düşsün</button>
+          <button id="d-sens" type="button">Sensör arızası</button>
+        </div></div>
+        <div class="grp"><small>KONTROL</small><div class="ctl">
+          <button id="d-sog" type="button">Soğutma (manuel)</button>
+          <button id="d-sul" type="button">Sulama (manuel)</button>
+          <button id="d-des" type="button">Destek iste</button>
+          <button id="d-gun2" type="button">Yazılım güncellemesi</button>
+        </div></div>
+        <p class="note">Bu bir tanıtım demosudur, hazır senaryoları oynatır. Gerçek cihazın davranışını örnekler.</p>
+      </div>
+      <div class="chat" aria-label="Telegram sohbeti demosu">
+        <div class="h"><div class="av"><svg aria-hidden="true"><use href="#i-mark"/></svg></div><div><b>ULU BEYİN</b><small>çevrimiçi</small></div></div>
+        <div class="log" id="log" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <span class="eyebrow">KİMLER İÇİN</span>
+      <h2>Kuluçkayı ciddiye alan herkes için.</h2>
+    </div>
+    <div class="split">
+      <div class="who"><h3>Kuluçka makinesi üreticileri</h3><p>Kontrol tarafını bize bırakın, elektronik geliştirmek yerine makinenize odaklanın.</p></div>
+      <div class="who"><h3>Kuluçkacılar ve çiftlikler</h3><p>Telefondan izleyin, alarmlarla geceleri rahat uyuyun. Makineniz ne olursa olsun akıllanır.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <span class="eyebrow">NASIL ÇALIŞIR</span>
+      <h2>Kurulum dakikalar sürer.</h2>
+    </div>
+    <ol class="steps">
+      <li><b>Cihazı bağlayın</b><span>Makinenize takın ve enerji verin.</span></li>
+      <li><b>Telefondan kurun</b><span>Cihazı kendi Wi-Fi ağınıza ve Telegram'a bağlayın.</span></li>
+      <li><b>Türü seçin</b><span>Ekrandan türü seçin, kuluçkayı başlatın.</span></li>
+      <li><b>Telefondan izleyin</b><span>Durum ve alarmlar Telegram'a gelir.</span></li>
+    </ol>
+  </section>
+  <section id="siparis">
+    <div class="order">
+      <div class="head" style="margin-bottom:34px">
+        <span class="eyebrow">SİPARİŞ</span>
+        <h2>Cihazınızı ayırtın.</h2>
+        <p>Seçiminizi yapın. Mesajınız WhatsApp'ta hazır açılır, tek dokunuşla bize ulaşır. Fiyat, ödeme ve teslimat size yazılı iletilir.</p>
+      </div>
+      <div class="ogrid">
+        <div class="form">
+          <div class="lab" role="radiogroup" aria-label="Sipariş türü"><span class="t">Sipariş türü</span>
+            <div class="seg">
+              <label><input type="radio" name="kul" value="Bireysel" checked><span class="o"><b>Bireysel</b><small>1 ile 9 cihaz</small></span></label>
+              <label><input type="radio" name="kul" value="Toplu alım"><span class="o"><b>Toplu alım</b><small>10 ve üzeri, bayi ve üreticiler</small></span></label>
+            </div>
+          </div>
+          <div class="lab" id="adet-tek"><span class="t">Adet</span>
+            <div class="qty">
+              <button type="button" id="eksi" aria-label="Adedi azalt">−</button>
+              <output id="adet" aria-live="polite">1</output>
+              <button type="button" id="arti" aria-label="Adedi artır">+</button>
+            </div>
+          </div>
+          <div class="lab" id="adet-toplu" hidden><span class="t">Tahmini adet</span>
+            <div class="chipsel" role="radiogroup" aria-label="Tahmini adet">
+              <label><input type="radio" name="top" value="10 ve üzeri" checked><span>10+</span></label>
+              <label><input type="radio" name="top" value="25 ve üzeri"><span>25+</span></label>
+              <label><input type="radio" name="top" value="50 ve üzeri"><span>50+</span></label>
+              <label><input type="radio" name="top" value="100 ve üzeri"><span>100+</span></label>
+            </div>
+          </div>
+          <div class="two">
+            <label class="lab" for="ad"><span class="t">Ad Soyad</span><input id="ad" type="text" autocomplete="name" placeholder="Adınız soyadınız"></label>
+            <label class="lab" for="sehir"><span class="t">Şehir</span><input id="sehir" type="text" autocomplete="address-level1" placeholder="Teslimat şehri"></label>
+          </div>
+          <label class="lab" for="not"><span class="t">Notunuz (isteğe bağlı)</span><textarea id="not" placeholder="Makine modeliniz, ihtiyacınız ya da sormak istedikleriniz"></textarea></label>
+        </div>
+        <div class="sum" aria-live="polite">
+          <h3>Sipariş özeti</h3>
+          <dl>
+            <div><dt>Ürün</dt><dd>ULU BEYİN Kuluçka</dd></div>
+            <div><dt>Sipariş türü</dt><dd id="s-kul"></dd></div>
+            <div><dt>Adet</dt><dd id="s-adet">1</dd></div>
+            <div><dt>Şehir</dt><dd id="s-sehir">Belirtilmedi</dd></div>
+          </dl>
+          <a class="btn wa lg" id="wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Siparişi WhatsApp'ta tamamla</a>
+          <div class="acts">
+            <a class="btn s sm" id="ig" href="https://ig.me/m/ulubeyin" target="_blank" rel="noopener">Instagram'dan ilet</a>
+            <a class="btn s sm" id="tg" href="https://t.me/Ulubeyin" target="_blank" rel="noopener">Telegram'dan ilet</a>
+          </div>
+          <div class="status" id="durum" role="status"></div>
+          <ul>
+            <li>Makinenize uyumu birlikte netleştiririz</li>
+            <li>Fiyat, ödeme ve teslimat bilgisi yazılı iletilir</li>
+            <li>Kurulum ve kullanımda destek veririz</li>
+          </ul>
+        </div>
+      </div>
+      <ol class="steps after">
+        <li><b>Mesajınız bize ulaşır</b><span>Doğrudan ekibimizde.</span></li>
+        <li><b>Uyumu netleştiririz</b><span>Makinenize nasıl bağlanacağını birlikte planlarız.</span></li>
+        <li><b>Size özel teklif</b><span>Fiyat, ödeme ve teslimat yazılı olarak gelir.</span></li>
+        <li><b>Teslimat ve kurulum</b><span>Cihaz size ulaşır, kurulumda yanınızdayız.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="sss">
+    <div class="head">
+      <span class="eyebrow">SIKÇA SORULANLAR</span>
+      <h2>Merak edilenler.</h2>
+    </div>
+    <details><summary>İnternet olmazsa ne olur?</summary><p>Kontrol ve ekran internetten bağımsız çalışır. Telegram mesajları için internet gerekir.</p></details>
+    <details><summary>Elektrik kesilirse kuluçka sıfırlanır mı?</summary><p>Hayır. Cihaz kuluçkayı kaydeder ve elektrik gelince kaldığı yerden devam eder.</p></details>
+    <details><summary>Hangi makinelere takılır?</summary><p>Isıtıcı, fan, nemlendirici, pompa, viyol ve ışık çıkışları olan makinelere. Makinenizi nasıl bağlayacağınızı birlikte planlarız.</p></details>
+    <details><summary>Kurulum zor mu?</summary><p>Hayır. Telefonunuzdan cihazı Wi-Fi'nize ve Telegram'a bağlarsınız, ekrandan türü seçip başlatırsınız. Takıldığınızda destek ekibi yanınızdadır.</p></details>
+    <details><summary>Fiyat nedir?</summary><p>Fiyat adede ve ihtiyaca göre değişir. Siparişinizi oluşturun, size teklif iletelim.</p></details>
+    <details><summary>Garanti ve teslimat nasıl?</summary><p>Garanti ve teslimat koşulları sipariş sırasında yazılı olarak netleştirilir.</p></details>
+  </section>
+  <section id="iletisim" style="padding-bottom:40px">
+    <div class="head">
+      <span class="eyebrow">İLETİŞİM</span>
+      <h2>Bize yazın.</h2>
+    </div>
+    <div class="contact">
+      <a class="c" id="wa2" href="#" target="_blank" rel="noopener"><small>WHATSAPP</small><b>0546 760 28 93</b></a>
+      <a class="c" href="https://ig.me/m/ulubeyin" target="_blank" rel="noopener"><small>INSTAGRAM</small><b>@ulubeyin</b></a>
+      <a class="c" href="https://t.me/Ulubeyin" target="_blank" rel="noopener"><small>TELEGRAM</small><b>@Ulubeyin</b></a>
+    </div>
+  </section>
+</div>
+
+<footer class="wrap">
+  <span>© 2026 ULU BEYİN</span>
+  <a href="index.html" style="color:inherit">ULU BEYİN ana sayfa</a>
+</footer>
+
+<a class="btn wa float" id="wa3" href="#" target="_blank" rel="noopener" aria-label="WhatsApp ile yazın"><svg><use href="#i-wa"/></svg>WhatsApp</a>
+<script src="common.js"></script>
+<script src="kulucka.js"></script>
+</body>
+</html>
