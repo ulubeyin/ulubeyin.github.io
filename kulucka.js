@@ -1,12 +1,17 @@
 function baseState(tur, total, cooling) {
   return { t: 37.5, tt: 37.5, h: 55, th: 55, day: 1, total: total, hr: 0, tur: tur, clk: [9, 0], cooling: cooling, alarm: 0, off: false, status: "Gelişim devam ediyor",
-    out: { heater: true, circ: true, hum: true, pump: false, cool: false, viyol: true, siren: false } };
+    hw: { fan: 1, pump: 1, kab: 1, kon: 1 },
+    out: { heater: true, circ: true, hum: true, pump: false, cool: false, viyol: true, kab: false, kon: false, siren: false } };
 }
+
+/* Soğutma veya sulama çalışırken ısıtıcı ve nemlendirici HER ZAMAN kapalı (cihaz yazılımıyla aynı kural) */
+function wetOn(s) { s.out.heater = false; s.out.hum = false; }
 
 /* Çıkışlar canlı gibi açılıp kapanır (görsel canlandırma) */
 function cycle(s) {
-  s.out.heater = Math.random() < 0.55;
-  s.out.hum = Math.random() < 0.35;
+  var wet = s.out.cool || s.out.pump;
+  s.out.heater = wet ? false : Math.random() < 0.55;
+  s.out.hum = wet ? false : Math.random() < 0.35;
   s.out.circ = true;
   if (Math.random() < 0.08) s.out.viyol = !s.out.viyol;
   if (s.cooling && !s.out.cool) s.out.pump = false;
@@ -91,10 +96,19 @@ function cycle(s) {
   B["d-gun"].addEventListener("click", function () {
     if (busy || s.day >= s.total) return;
     s.day++; tick(24 * 60); s.hr = 4; norm();
+    var seq = false;
     if (s.cooling && s.day >= 5 && s.day < s.total - 2) {
-      s.out.cool = true; s.out.pump = true; s.status = "Günlük soğutma ve sulama yapılıyor"; upd(s);
-      say("❄ Günlük soğutma ve sulama otomatik tamamlandı.");
-      setTimeout(function () { s.out.cool = false; s.out.pump = false; norm(); upd(s); }, 1200);
+      /* Önce soğutma, sonra kısa sulama; ikisinde de ısıtıcı ve nem kapalı, bitince ısıtıcı yeniden açılır */
+      seq = true; lock(true);
+      s.out.cool = true; s.out.pump = false; wetOn(s); s.status = "Günlük soğutma yapılıyor"; upd(s);
+      say("❄ Otomatik soğutma başladı. Isıtıcı ve nemlendirici kapalı.");
+      setTimeout(function () {
+        s.out.cool = false; s.out.pump = true; wetOn(s); s.status = "Günlük sulama yapılıyor"; upd(s);
+        setTimeout(function () {
+          s.out.pump = false; s.out.heater = true; norm(); upd(s);
+          say("✅ Günlük soğutma ve sulama tamamlandı. Isıtıcı yeniden açılıyor.", "ok"); lock(false);
+        }, 900);
+      }, 1200);
     }
     if (s.day >= s.total - 2 && !flags.cikim) {
       flags.cikim = true; s.th = 75; s.out.viyol = false; norm();
@@ -104,7 +118,7 @@ function cycle(s) {
       flags.bitti = true; s.status = "Süre doldu, çıkım onayı bekleniyor";
       say("✅ " + s.tur + " kuluçkası başarıyla tamamlandı! Emeğiniz hayırlara vesile olsun, Allah bereket versin. 🐣", "ok");
     }
-    upd(s); lock(false);
+    upd(s); if (!seq) lock(false);
   });
 
   B["d-kapi"].addEventListener("click", function () {
@@ -153,17 +167,17 @@ function cycle(s) {
   B["d-sog"].addEventListener("click", function () {
     if (busy) return;
     if (!s.cooling) { say("ℹ Bu tür için soğutma gerekmez.", ""); return; }
-    lock(true); s.out.cool = true; s.status = "Soğutma (manuel) çalışıyor"; upd(s);
-    say("❄ Soğutma manuel başlatıldı. Süre dolunca otomatik biter.");
-    setTimeout(function () { s.out.cool = false; norm(); upd(s); say("✅ Soğutma tamamlandı.", "ok"); lock(false); }, 1800);
+    lock(true); s.out.cool = true; wetOn(s); s.status = "Soğutma (manuel) çalışıyor"; upd(s);
+    say("❄ Soğutma manuel başlatıldı. Isıtıcı ve nemlendirici kapalı. Süre dolunca otomatik biter.");
+    setTimeout(function () { s.out.cool = false; s.out.heater = true; norm(); upd(s); say("✅ Soğutma tamamlandı. Isıtıcı yeniden açılıyor.", "ok"); lock(false); }, 1800);
   });
 
   B["d-sul"].addEventListener("click", function () {
     if (busy) return;
     if (!s.cooling) { say("ℹ Bu tür için sulama gerekmez.", ""); return; }
-    lock(true); s.out.pump = true; s.status = "Sulama (manuel) çalışıyor"; upd(s);
-    say("💦 Sulama manuel başlatıldı.");
-    setTimeout(function () { s.out.pump = false; norm(); upd(s); say("✅ Sulama tamamlandı.", "ok"); lock(false); }, 1500);
+    lock(true); s.out.pump = true; wetOn(s); s.status = "Sulama (manuel) çalışıyor"; upd(s);
+    say("💦 Sulama manuel başlatıldı. Isıtıcı ve nemlendirici kapalı.");
+    setTimeout(function () { s.out.pump = false; s.out.heater = true; norm(); upd(s); say("✅ Sulama tamamlandı. Isıtıcı yeniden açılıyor.", "ok"); lock(false); }, 1500);
   });
 
   B["d-des"].addEventListener("click", function () {

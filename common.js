@@ -40,9 +40,10 @@ function buildScreen(root) {
     q("gun").textContent = "Gün " + s.day + "/" + s.total;
     q("egg").textContent = "Yumurta " + (s.eggs || 60);
     q("hed").textContent = "🎯 " + fmt1(s.tt) + "°C · %" + s.th;
-    var L = [["heater", "🔥 Isıtıcı"], ["circ", "🌀 Sirkülasyon"], ["hum", "💧 Nem"], ["pump", "💦 Pompa"], ["cool", "❄ Soğutma"], ["viyol", "🔄 Viyol"], ["siren", "🔔 Siren"]];
+    /* Üçüncü değer: cihazda o donanım yoksa çip hiç görünmez (1 = her cihazda var) */
+    var L = [["heater", "🔥 Isıtıcı", 1], ["circ", "🌀 Sirkülasyon", 1], ["hum", "💧 Nem", 1], ["pump", "💦 Pompa", "pump"], ["cool", "❄ Soğutma", "fan"], ["viyol", "🔄 Viyol", 1], ["kab", "💡 Kabin ışığı", "kab"], ["kon", "🔦 Kontrol ışığı", "kon"], ["siren", "🔔 Siren", 1]];
     var hs = q("hs");
-    if (!hs.children.length) hs.innerHTML = L.map(function (x) { return '<span data-o="' + x[0] + '">' + x[1] + '</span>'; }).join("");
+    if (!hs.children.length) hs.innerHTML = L.filter(function (x) { return x[2] === 1 || (s.hw && s.hw[x[2]]); }).map(function (x) { return '<span data-o="' + x[0] + '">' + x[1] + '</span>'; }).join("");
     Array.prototype.forEach.call(hs.children, function (e) { e.classList.toggle("on", !!s.out[e.getAttribute("data-o")]); });
     q("al").innerHTML = s.alarm ? '<div class="al' + (s.alarm === 2 ? " e" : "") + '">⚠ ' + s.status + '</div>' : "";
     var ph = s.day >= s.total ? 3 : s.day >= s.total - 2 ? 2 : 1, b = [];
