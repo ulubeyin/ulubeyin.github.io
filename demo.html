@@ -309,7 +309,7 @@ function cmd(t){t=t.trim();var a=t.split(' '),c=a[0].toLowerCase(),arg=a[1];
  case '/iptal_evet':if(!S.mode)break;L('Kuluçka iptal edildi');endRun('iptal');S.mode=null;S.sc='home';rr('❌ Kuluçka iptal edildi.');break;
  case '/soguma_baslat':var e1=coolStart(0);if(e1)rr(e1);else rr('❄ Soğutma başladı (en fazla 30 dk). Bu sürede alarmlar 1 saat susturuldu.',[['⏹ Durdur','/soguma_dur']]);break;
  case '/soguma_dur':S.cool=0;rr('❄ Soğutma durdu.');break;
- case '/sulama_baslat':var e2=pumpRun(0);if(e2)rr(e2);else rr('💦 Pompa 15 sn çalıştı ve durdu. Alarmlar 1 saat susturuldu; 3 saat yüksek nem uyarısı verilmez.');break;
+ case '/sulama_baslat':var e2=pumpRun(0);if(e2)rr(e2);else rr('💦 Pompa 15 saniye çalışacak, sonra duracak. Alarmlar 1 saat susturuldu; 3 saat yüksek nem uyarısı verilmez.');break;
  case '/kabin_isigi':case '/kontrol_isigi':var k=c=='/kabin_isigi'?'kab':'kon';if(!S.hw[k]){rr('Bu cihazda '+(k=='kab'?'kabin':'kontrol')+' ışığı yok.');break}S[k]=S[k]?0:1;rr((k=='kab'?'Kabin ışığı ':'Kontrol ışığı ')+(S[k]?'açıldı':'kapatıldı'),[[S[k]?'Kapat':'Aç',c]]);break;
  case '/isik':if(!S.hw.kab&&!S.hw.kon){rr('Bu cihazda ışık yok.');break}var lk=[];if(S.hw.kab)lk.push([S.kab?'Kabin kapat':'Kabin aç','/kabin_isigi']);if(S.hw.kon)lk.push([S.kon?'Kontrol kapat':'Kontrol aç','/kontrol_isigi']);rr('💡 Işıklar'+(S.hw.kab?'\nKabin: '+(S.kab?'açık':'kapalı'):'')+(S.hw.kon?'\nKontrol: '+(S.kon?'açık':'kapalı'):''),lk);break;
  case '/sustur':if(!alarm()){rr('Şu an susturulacak bir alarm yok.');break}S.sus=1;rr('🔇 Siren susturuldu. Alarm sürerse 30 dk sonra yeniden çalar. Alarm bitince bu ayar kendiliğinden sıfırlanır.');break;
@@ -474,7 +474,7 @@ function act(a){var q=a.split(':');S.tm='';var zi=$('ozn');if(zi&&S.zc)S.zc.name
  else if(a=='ek'){S.ek=1;S.ekUntil=S.now+720;L('Ek süre +12 saat');say('⏱ Ekrandan 12 saat ek süre verildi.')}
  else if(a=='bitir'){L('Kuluçka bitirildi');endRun('bitti');S.mode=null;say('🏁 Ekrandan kuluçka bitirildi.')}
  else if(a=='sog'){if(S.cool){S.cool=0;say('❄ Soğutma durdu.')}else{var e=coolStart(0);if(e)S.tm=e;else say('❄ Ekrandan soğutma başladı (en fazla 30 dk). Alarmlar 1 saat susturuldu.')}}
- else if(a=='sul'){var e3=pumpRun(0);if(e3)S.tm=e3;else{S.tm='Pompa 15 sn çalıştı.';say('💦 Ekrandan sulama: pompa 15 sn çalıştı. Alarmlar 1 saat susturuldu.')}}
+ else if(a=='sul'){var e3=pumpRun(0);if(e3)S.tm=e3;else{S.tm='Pompa 15 saniye çalışacak.';say('💦 Ekrandan sulama başladı: pompa 15 saniye çalışacak. Alarmlar 1 saat susturuldu.')}}
  else if(a=='sus'){if(alarm()){S.sus=1;say('🔇 Ekrandan siren susturuldu. Alarm sürerse 30 dk sonra yeniden çalar.')}}
  else if(a=='normal'){S.safe=0;S.hits=[];L('Güvenli Mod kapatıldı');say('✅ Ekrandan normale dönüldü.')}
  else if(a=='iptal')S.iq=1;else if(a=='iptal2'){L('Kuluçka iptal edildi');endRun('iptal');S.mode=null;S.iq=0;say('❌ Ekrandan kuluçka iptal edildi.')}else if(a=='iptal0')S.iq=0;
