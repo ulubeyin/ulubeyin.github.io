@@ -151,9 +151,10 @@ function stat(){var t='📊 ULU BEYİN V1.12 - DURUM\n';
  var hT=S.mode?' · Hedef '+f(tgtT())+'°C':'',hH=S.mode?' · Hedef %'+tgtH():'';
  t+=S.hw.heat==2?'🌡 Bölge 1: '+f(dsp(0))+'°C · Bölge 2: '+f(dsp(1))+'°C'+hT+'\n':'🌡 Sıcaklık: '+f(avg())+'°C'+hT+'\n';
  t+='💧 Nem: %'+dh()+hH+'\n';
- if(S.mode){t+='🔥 Isıtıcı: '+(S.duty>0.05?'çalışıyor':'bekliyor')+'\n';if(elig(S.mode))t+='❄ Soğutma: '+lbl(S.sog)+' · 💦 Sulama: '+lbl(S.su)+'\n'}
- if(S.tEnd){var TN2={h1:'Isıtıcı 1',h2:'Isıtıcı 2',cir:'Sirkülasyon',fan:'Fan',nem:'Nem',pmp:'Pompa',viy:'Viyol',kab:'Kabin ışığı',kon:'Kontrol ışığı',sir:'Siren'},on=Object.keys(S.t).filter(function(k){return S.t[k]}).map(function(k){return TN2[k]});t+='🔧 Test modu · açık: '+(on.length?on.join(', '):'hiçbiri')+'\n'}if(S.dry.on)t+='🧼 Kurutma modu açık (kalan '+dryLeft()+' dk)\n';var li=[];if(S.hw.kab)li.push('Kabin: '+(S.kab||S.t.kab?'açık':'kapalı'));if(S.hw.kon)li.push('Kontrol: '+(S.kon||S.t.kon?'açık':'kapalı'));
- t+=(li.length?'💡 '+li.join(' · ')+'\n':'')+'📶 WiFi %'+pct()+'\n';
+ if(S.mode){if(elig(S.mode))t+='❄ Soğutma: '+lbl(S.sog)+' · 💦 Sulama: '+lbl(S.su)+'\n'}
+ if(S.tEnd)t+='🔧 Test modu\n';if(S.dry.on)t+='🧼 Kurutma modu açık (kalan '+dryLeft()+' dk)\n';var o=outs(),T2=S.tEnd?S.t:{},on=[];if(o.heater||T2.h1||T2.h2)on.push(S.hw.heat==2?(T2.h1||T2.h2?(T2.h1&&T2.h2?'Isıtıcı 1, Isıtıcı 2':T2.h1?'Isıtıcı 1':'Isıtıcı 2'):'Isıtıcı'):'Isıtıcı');if(o.circ||T2.cir)on.push('Sirkülasyon');if(o.cool||T2.fan)on.push('Soğutma fanı');if(o.hum||T2.nem)on.push('Nem');if(o.pump||T2.pmp)on.push('Pompa');if(o.viyol||T2.viy)on.push('Viyol');if(o.kab||T2.kab)on.push('Kabin ışığı');if(o.kon||T2.kon)on.push('Kontrol ışığı');if(o.siren||T2.sir)on.push('Siren');
+ t+='⚙ Çalışan: '+(on.length?on.join(', '):'hiçbiri')+'\n';
+ t+='📶 WiFi %'+pct()+'\n';
  return t+stState()}
 function upd(k,t){if(S.off||S.st<4||!S.pw)return;for(var i=msgs.length-1;i>=0;i--){if(msgs[i].k==k){msgs[i].t=t+' (güncellendi '+hhmm(S.now)+')';drawChat();return}}msgs.push({b:1,t:t,kb:[],k:k});drawChat()}
 function SL(t){(S.slog=S.slog||[]).push({h:hhmm(S.now),t:t})}
