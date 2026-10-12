@@ -19,7 +19,7 @@ function waLink(text) { return "https://wa.me/" + WA_NUMBER + (text ? "?text=" +
 })();
 
 /* Cihaz ekranı çizimi: cihazın ana ekranıyla aynı düzen */
-var ICO = { "Tavuk": "🐔", "Kaz": "🪿", "Misk ördeği": "🦆" };
+var ICO = { "Tavuk": "img/tavuk.jpg", "Hindi": "img/hindi.jpg", "Bıldırcın": "img/bildircin.jpg", "Kaz": "img/kaz.jpg", "Ördek": "img/ordek.jpg", "Misk ördeği": "img/misk.jpg", "Sülün": "img/sulun.jpg", "Keklik": "img/keklik.jpg", "Özel mod": "img/ozel.jpg" };
 function buildScreen(root) {
   root.innerHTML = '<div class="scw"><div class="sc">' +
     '<div class="sb"><span>ULU BEYİN V1.12</span><span>WiFi<span class="wf" aria-hidden="true"><i></i><i></i><i></i><i></i></span>%80</span></div>' +
@@ -35,7 +35,7 @@ function buildScreen(root) {
     q("t1").textContent = fmt1(s.t) + "°C";
     q("t2").textContent = fmt1(s.t + 0.1) + "°C";
     q("nem").textContent = "Nem %" + Math.round(s.h);
-    q("ico").textContent = ICO[s.tur] || "🥚";
+    q("ico").innerHTML = ICO[s.tur] ? '<img src="' + ICO[s.tur] + '" alt="" width="46" height="44">' : "";
     q("tur").textContent = s.tur;
     q("gun").textContent = "Gün " + s.day + "/" + s.total;
     q("egg").textContent = "Yumurta " + (s.eggs || 60);
