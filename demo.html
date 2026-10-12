@@ -70,7 +70,9 @@ body{max-width:1100px;padding-inline:12px;font-family:"IBM Plex Sans",system-ui,
 .adv{margin:6px 0}.adv summary{cursor:pointer;color:#9fb0c4;font-size:12px;padding:4px 0}
 .bez{background:#0f1620;border:1px solid #2f3a58;border-radius:18px;padding:8px;margin:8px 7px 16px;box-shadow:0 0 0 6px #070a12,0 0 0 7px #26304b,0 0 50px -10px rgba(74,158,255,.3)}
 .bezin{position:relative;width:100%;aspect-ratio:3/2;overflow:hidden;border-radius:10px;background:#10151c}
-#scr{position:absolute;left:0;top:0;width:440px;height:293px;min-height:0!important;box-sizing:border-box;overflow:auto;transform-origin:0 0;border-radius:0}
+#scr button{padding:5px 8px!important;min-height:28px!important;font-size:12px!important}
+#scr{gap:4px!important;padding:8px!important}
+#scr{position:absolute;left:0;top:0;width:480px;height:320px;min-height:0!important;box-sizing:border-box;overflow:auto;transform-origin:0 0;border-radius:0}
 .vnote{margin:14px 4px 4px;font-size:12px;color:#8a97b2;text-align:center}
 </style>
 <div class="cols"><div class="c1">
@@ -411,7 +413,7 @@ function scr(){var h=hdr(),H='',p;
  H='<div class="row hd" style="justify-content:space-between;align-items:flex-start;flex-wrap:nowrap"><div>'+tb+'<div class="mut">Nem %'+dh()+'</div></div><div style="text-align:right">'+(S.mode?ph(S.mode,44)+'<div style="font-size:16px">'+TN[S.mode]+'</div><div>'+dT()+'</div>'+(S.mode=='ozel'?'':'<div class="mut">Yumurta '+S.eggs+'</div>')+'<div class="mut">🎯 '+f(tgtT())+'°C · %'+tgtH()+'</div>':'<div class="mut">Aktif kuluçka yok</div>')+'</div></div>';
  if(S.mode)H+=chips()+timeBar();
  if(S.safe)H+='<div style="background:#7a5200;padding:5px 8px;border-radius:6px">🛡 Güvenli Mod: ısıtıcı gücü yarıya indi, kilit 38,5°C</div>';else if(S.lock)H+='<div style="background:#7a5200;padding:5px 8px;border-radius:6px">🔒 Isıtıcı kilitli, soğuyunca açılır</div>';
- if(S.mode&&p==2&&!S.conf)H+='<div style="background:#1d4f8f;padding:6px 8px;border-radius:6px">🐣 Çıkım dönemi: yumurtaları çıkış sepetine alın, sonra [Onayla]ya basın.</div>';
+ if(S.mode&&p==2&&!S.conf)H+='<div style="background:#1d4f8f;padding:6px 8px;border-radius:6px">🐣 Çıkım dönemi: yumurtaları çıkış sepetine alın, [Onayla]ya basın.</div>';
  if(S.mode&&p==3)H+='<div style="background:#7a5200;padding:6px 8px;border-radius:6px">🏁 Süre doldu: civcivleri alın, sonra [Şimdi bitir]e basın.</div>';
  var r='';if(!S.mode)r+=B('new','Yeni kuluçka','p');else{if(S.mode!='ozel')r+=B('eg','Yumurta');if(p==2&&!S.conf)r+=B('onay','Onayla','p');if(p==3){if(!S.ek)r+=B('ek','Ek süre +12s');r+=B('bitir','Şimdi bitir','r')}if(elig(S.mode)){if(S.sog=='M')r+=B('sog','Soğutma'+(S.cool?' (durdur)':''),S.cool?'on':'');if(S.su=='M')r+=B('sul','Sulama')}r+=B('iptal','İptal')}
  if(S.safe)r+=B('normal','Normale dön');r+=B('isik','Işıklar')+B('set','Ayarlar');
@@ -559,7 +561,7 @@ init();
  document.addEventListener('click',function(e){var b=e.target.closest('[data-hw]');if(b&&!S.mode)act(b.getAttribute('data-hw'));hwUpd()});
  act('start');act('net:Ana_WiFi');act('wcon');act('tok');cmd('/start');act('ok');hwUpd();
  $('b5').textContent='Kurulumdan başla';
- function fit(){var w=$('bezin').clientWidth;if(w)$('scr').style.transform='scale('+(w/440)+')'}
+ function fit(){var w=$('bezin').clientWidth;if(w)$('scr').style.transform='scale('+(w/480)+')'}
  if(window.ResizeObserver)new ResizeObserver(fit).observe($('bezin'));window.addEventListener('load',fit);window.addEventListener('resize',fit);fit();
  function h(){try{parent.postMessage({ub_demo_h:document.documentElement.scrollHeight},'*')}catch(x){}}
  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);window.addEventListener('load',h);setInterval(h,1500);
