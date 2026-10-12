@@ -59,3 +59,20 @@ function buildScreen(root) {
     root.classList.toggle("off", !!s.off);
   };
 }
+
+/* Menü bağlantısına tıklanınca hedef bölüm parlar, menüde seçili kalır */
+(function () {
+  function hedef(id) { return id ? document.getElementById(id) : null; }
+  function vur(id) {
+    var el = hedef(id); if (!el || el.tagName !== "SECTION") return;
+    el.classList.remove("pulse"); void el.offsetWidth; el.classList.add("pulse");
+    setTimeout(function () { el.classList.remove("pulse"); }, 2100);
+    Array.prototype.forEach.call(document.querySelectorAll(".nav a.l"), function (a) { a.classList.toggle("act", a.getAttribute("href") === "#" + id); });
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+    var id = a.getAttribute("href").slice(1); if (!hedef(id)) return;
+    setTimeout(function () { vur(id); }, 450);
+  });
+  window.addEventListener("hashchange", function () { setTimeout(function () { vur(location.hash.slice(1)); }, 450); });
+})();
