@@ -601,7 +601,7 @@ $('hsl').oninput=function(){$('hsv').textContent='%'+this.value};$('hsl').onchan
 $('b5').onclick=init;
 $('sg').oninput=function(){S.sig=parseInt(this.value);draw()};
 $('rl').onchange=function(){S.role=this.value;if(S.st>=4&&!S.off&&S.pw)raw('Şimdi Telegram’ı '+S.role+' olarak kullanıyorsunuz.',mainKb());draw()};
-setInterval(function(){if(typeof S==='undefined'||!S||!S.pmpUntil)return;if(pumpOn()){if(S.sc=='home')draw();return}var man=!S.pmpAuto;S.pmpUntil=0;S.tm='✔ Sulama bitti, pompa kendiliğinden durdu.';if(man)say('💦 Sulama bitti, pompa kendiliğinden durdu.');draw()},1000);
+setInterval(function(){if(typeof S==='undefined'||!S||!S.pmpUntil)return;if(pumpOn()){if(S.sc=='home')draw();return}var man=!S.pmpAuto;S.pmpUntil=0;S.tm='✔ Pompa otomatik kapandı.';if(man)say('💦 Pompa otomatik kapandı.');draw();setTimeout(function(){if(S.tm=='✔ Pompa otomatik kapandı.'){S.tm='';draw()}},2000)},1000);
 init();
 (function(){
  function hwUpd(){var m={'u:h1':S.hw.heat==2,'u:h2':S.hw.heat==2,'u:fan':S.hw.fan,'u:pump':S.hw.pump,'u:kab':S.hw.kab,'u:kon':S.hw.kon};

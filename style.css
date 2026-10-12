@@ -304,3 +304,14 @@ footer { border-top: 1px solid var(--line); padding-block: 36px 120px; color: va
 section.pulse { animation: sec-pulse 2s ease-out; border-radius: 18px; }
 .nav a.l.act { color: #fff; box-shadow: 0 2px 0 0 #4a9eff; }
 @media (prefers-reduced-motion: reduce) { section.pulse { animation: none; box-shadow: inset 0 0 0 2px rgba(74,158,255,.6); } }
+
+/* ana sayfa: arka plan logosu + yanıp sönen parlak başlık */
+.bglogo { position: absolute; right: -90px; top: 150px; width: 420px; height: 420px; opacity: .08; color: #fff; animation: logoBreath 6s ease-in-out infinite; }
+@keyframes logoBreath { 0%,100% { opacity: .06; transform: scale(1); } 50% { opacity: .14; transform: scale(1.04); } }
+.hero h1 em { animation: glowPulse 2.6s ease-in-out infinite; }
+@keyframes glowPulse {
+  0%,100% { text-shadow: 0 0 14px rgba(154,212,255,.35), 0 0 2px rgba(255,255,255,.4); opacity: .88; }
+  50% { text-shadow: 0 0 44px rgba(154,212,255,.95), 0 0 10px rgba(255,255,255,.9); opacity: 1; }
+}
+.hero .cta { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+@media (prefers-reduced-motion: reduce) { .bglogo, .hero h1 em { animation: none; } }
