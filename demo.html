@@ -24,7 +24,7 @@ input,select,button{font-family:inherit}
 .dev input{background:#1f2a38;color:#e8eef5;border:0.5px solid #3b4b60}
 .big{font-size:38px;font-weight:500;line-height:1}
 .hd>div{min-width:0}
-@media(max-width:520px){.hd .big{font-size:22px!important}.hd img{width:34px!important;height:33px!important}.hd .row{gap:8px!important}.hd{font-size:12px}}
+.hd .big{font-size:24px!important}.hd img{width:40px!important;height:38px!important}.hd .row{gap:10px!important}.hd{font-size:12px}
 .hs{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
 .hs span{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid #1f2b3b;color:#3f4c61}
 .hs span.on{color:#d6ffe9;border-color:color-mix(in srgb,#34d27b 65%,transparent);background:color-mix(in srgb,#34d27b 16%,transparent);box-shadow:0 0 10px -2px color-mix(in srgb,#34d27b 60%,transparent)}
@@ -68,11 +68,14 @@ body{max-width:1100px;padding-inline:12px;font-family:"IBM Plex Sans",system-ui,
 .tp{background:#161b28;border:1px solid #2a3350}
 .hint{background:#13294a;border:1px solid #1f3f6b}
 .adv{margin:6px 0}.adv summary{cursor:pointer;color:#9fb0c4;font-size:12px;padding:4px 0}
+.bez{background:#0f1620;border:1px solid #2f3a58;border-radius:18px;padding:8px;margin:8px 7px 16px;box-shadow:0 0 0 6px #070a12,0 0 0 7px #26304b,0 0 50px -10px rgba(74,158,255,.3)}
+.bezin{position:relative;width:100%;aspect-ratio:3/2;overflow:hidden;border-radius:10px;background:#10151c}
+#scr{position:absolute;left:0;top:0;width:440px;height:293px;min-height:0!important;box-sizing:border-box;overflow:auto;transform-origin:0 0;border-radius:0}
 .vnote{margin:14px 4px 4px;font-size:12px;color:#8a97b2;text-align:center}
 </style>
 <div class="cols"><div class="c1">
 <div class="hint" id="hint"></div>
-<div class="dev" id="scr"></div>
+<div class="bez"><div class="bezin" id="bezin"><div class="dev" id="scr"></div></div></div>
 <div class="tp">
 <div id="clk" style="font-weight:500"></div>
 <div class="g"><span class="l">Zaman</span><button id="t10">+10 dk</button><button id="t60">+1 saat</button><button id="t1d">+1 gün</button><button id="t3d">+3 gün</button><button id="tcik">Çıkıma atla</button><button id="tplay">▶ Oynat</button></div>
@@ -149,7 +152,7 @@ function stat(){var t='📊 ULU BEYİN V1.12 - DURUM\n';
  t+=S.hw.heat==2?'🌡 Bölge 1: '+f(dsp(0))+'°C · Bölge 2: '+f(dsp(1))+'°C'+hT+'\n':'🌡 Sıcaklık: '+f(avg())+'°C'+hT+'\n';
  t+='💧 Nem: %'+dh()+hH+'\n';
  if(S.mode){t+='🔥 Isıtıcı: '+(S.duty>0.05?'çalışıyor':'bekliyor')+'\n';if(elig(S.mode))t+='❄ Soğutma: '+lbl(S.sog)+' · 💦 Sulama: '+lbl(S.su)+'\n'}
- if(S.dry.on)t+='🧼 Kurutma modu açık (kalan '+dryLeft()+' dk)\n';var li=[];if(S.hw.kab)li.push('Kabin: '+(S.kab?'açık':'kapalı'));if(S.hw.kon)li.push('Kontrol: '+(S.kon?'açık':'kapalı'));
+ if(S.tEnd){var TN2={h1:'Isıtıcı 1',h2:'Isıtıcı 2',cir:'Sirkülasyon',fan:'Fan',nem:'Nem',pmp:'Pompa',viy:'Viyol',kab:'Kabin ışığı',kon:'Kontrol ışığı',sir:'Siren'},on=Object.keys(S.t).filter(function(k){return S.t[k]}).map(function(k){return TN2[k]});t+='🔧 Test modu · açık: '+(on.length?on.join(', '):'hiçbiri')+'\n'}if(S.dry.on)t+='🧼 Kurutma modu açık (kalan '+dryLeft()+' dk)\n';var li=[];if(S.hw.kab)li.push('Kabin: '+(S.kab||S.t.kab?'açık':'kapalı'));if(S.hw.kon)li.push('Kontrol: '+(S.kon||S.t.kon?'açık':'kapalı'));
  t+=(li.length?'💡 '+li.join(' · ')+'\n':'')+'📶 WiFi %'+pct()+'\n';
  return t+stState()}
 function upd(k,t){if(S.off||S.st<4||!S.pw)return;for(var i=msgs.length-1;i>=0;i--){if(msgs[i].k==k){msgs[i].t=t+' (güncellendi '+hhmm(S.now)+')';drawChat();return}}msgs.push({b:1,t:t,kb:[],k:k});drawChat()}
@@ -555,6 +558,8 @@ init();
  document.addEventListener('click',function(e){var b=e.target.closest('[data-hw]');if(b&&!S.mode)act(b.getAttribute('data-hw'));hwUpd()});
  act('start');act('net:Ana_WiFi');act('wcon');act('tok');cmd('/start');act('ok');hwUpd();
  $('b5').textContent='Kurulumdan başla';
+ function fit(){var w=$('bezin').clientWidth;if(w)$('scr').style.transform='scale('+(w/440)+')'}
+ if(window.ResizeObserver)new ResizeObserver(fit).observe($('bezin'));window.addEventListener('load',fit);window.addEventListener('resize',fit);fit();
  function h(){try{parent.postMessage({ub_demo_h:document.documentElement.scrollHeight},'*')}catch(x){}}
  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);window.addEventListener('load',h);setInterval(h,1500);
 })();

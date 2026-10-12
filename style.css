@@ -296,3 +296,5 @@ footer { border-top: 1px solid var(--line); padding-block: 36px 120px; color: va
 .also div { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: var(--surface); }
 .also b { display: block; margin-bottom: 4px; }
 .also span { color: var(--muted); font-size: .92rem; }
+
+.hero-frame { display: block; width: 100%; border: 0; background: transparent; height: 330px; color-scheme: dark; }

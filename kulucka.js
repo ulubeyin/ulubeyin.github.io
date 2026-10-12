@@ -17,19 +17,12 @@ function cycle(s) {
   if (s.cooling && !s.out.cool) s.out.pump = false;
 }
 
-/* Ana ekran: hafifçe oynayan canlı değerler */
+/* Ana ekran: dokunulabilir gerçek cihaz ekranı (ekran.html, iframe) */
 (function () {
-  var upd = buildScreen($("scr-hero"));
-  var s = baseState("Kaz", 30, true); s.day = 12; s.hr = 4; s.clk = [14, 32];
-  upd(s);
-  if (REDUCE) return;
-  setInterval(function () {
-    s.t = 37.5 + (Math.random() - .5) * .2;
-    s.h = 55 + (Math.random() - .5) * 2;
-    cycle(s);
-    s.clk[1] += 1; if (s.clk[1] > 59) { s.clk[1] = 0; s.clk[0] = (s.clk[0] + 1) % 24; }
-    upd(s);
-  }, 1700);
+  var f = $("hero-frame"); if (!f) return;
+  window.addEventListener("message", function (e) {
+    if (e.source === f.contentWindow && e.data && e.data.ub_demo_h) f.style.height = Math.min(900, e.data.ub_demo_h + 4) + "px";
+  });
 })();
 
 /* ---------- Canlı demo: gerçek cihaz ekranı + Telegram (demo.html, iframe) ---------- */
