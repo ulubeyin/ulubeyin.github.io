@@ -154,7 +154,7 @@ function me(t){msgs.push({b:0,t:t});drawChat()}
 function phase(){if(!S.mode)return 0;if(S.fin)return 3;if(HD()>0&&S.day>=TOT[S.mode]-HD()+1)return 2;return 1}
 function drawChat(){var h='';msgs.slice(-20).forEach(function(m){h+='<div class="m '+(m.b?'b':'u')+'">'+m.t.replace(/\n/g,'<br>')+'</div>';if(m.b&&m.kb.length&&m===msgs[msgs.length-1]){h+='<div class="kb">';m.kb.forEach(function(k){h+='<button data-c="'+k[1]+'">'+k[0]+'</button>'});h+='</div>'}});$('chat').innerHTML=h;$('chat').scrollTop=99999}
 function stState(){if(alarm())return '🚨 AKTİF ALARM VAR';if(S.safe)return '🛡 Güvenli Mod';if(S.lock)return '🔒 Isıtıcı kilitli';var a=[];if(S.mode){var T=avg(),tg=tgtT(),hd=dh(),th=tgtH();if(T>tg+0.5)a.push('🌡 Sıcaklık hedefin üstünde');else if(T<tg-0.5)a.push('🌡 Sıcaklık hedefin altında');if(hd<th-5)a.push('💧 Nem hedefin altında');else if(hd>th+5)a.push('💧 Nem hedefin üstünde')}return a.length?a.join('\n'):'✅ Normal'}
-function stat(){var t='📊 ULU BEYİN V1.12 - DURUM\n';
+function stat(){var t='📊 ULU BEYİN V1.12 - DURUM\n🕐 Saat: '+hhmm(S.now)+'\n';
  if(S.mode){t+=(S.mode=='ozel'?'🧪 ':'🐣 ')+TN[S.mode]+' - '+dT()+(S.ek?' (+12 saat ek süre)':'')+'\n'+(S.mode=='ozel'?'':'🥚 Yumurta: '+S.eggs+'\n')}else t+='Aktif kuluçka yok.\n';
  var hT=S.mode?' · Hedef '+f(tgtT())+'°C':'',hH=S.mode?' · Hedef %'+tgtH():'';
  t+=S.hw.heat==2?'🌡 Bölge 1: '+f(dsp(0))+'°C · Bölge 2: '+f(dsp(1))+'°C'+hT+'\n':'🌡 Sıcaklık: '+f(avg())+'°C'+hT+'\n';
@@ -374,7 +374,7 @@ function send(){var v=$('inp').value.trim();if(!v)return;$('inp').value='';$('cm
 function B(a,l,c){return '<button class="'+(c||'')+'" data-a="'+a+'">'+l+'</button>'}
 function R(x){return '<div class="row">'+x+'</div>'}
 function wf(){return S.off?'İnternetsiz':'WiFi '+bars()+' %'+pct()}
-function hdr(){return '<div class="row" style="justify-content:space-between"><span class="mut" data-a="ver">ULU BEYİN V1.12</span><span class="mut">'+wf()+'</span></div>'}
+function hdr(){return '<div class="row" style="justify-content:space-between"><span class="mut" data-a="ver">ULU BEYİN V1.12</span><span class="mut" style="color:#e8eef5">🕐 '+hhmm(S.now)+'</span><span class="mut">'+wf()+'</span></div>'}
 function kpad(){var h='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px">';'123456789'.split('').forEach(function(d){h+=B('k:'+d,d)});return h+B('k:del','Sil')+B('k:0','0')+B('k:ok','Tamam','p')+'</div>'}
 function scr(){var h=hdr(),H='',p;
  if(!S.pw){hintT='Elektrik kesildi: cihaz kapalı. Telegram’a mesaj gitmez. "Elektrik ver" ile geri gelir.';return '<div style="flex:1;display:flex;align-items:center;justify-content:center;color:#556;font-size:15px;min-height:200px">Ekran kapalı (elektrik yok)</div>'}
@@ -519,7 +519,7 @@ function onDay(){var T=TOT[S.mode],H=HD();
  if(H>0&&S.day==T-H+1){S.phStart=S.now;say('🐣 Çıkım dönemi başladı. Yumurtaları çıkış sepetine alın ve onaylayın. Viyol durdu. Nem hedefi %'+tgtH()+'.',[['✅ Onayla','/onayla']])}
  if(S.day==T)say('⏰ Kuluçka yarın bitiyor.')}
 var LV=null;
-function liveNote(){return '\n\n📡 Canlı izleme: 30 sn\'de bir yenilenir, 10 dk sürer.'}
+function liveNote(){return '\n\n📡 Canlı izleme: 30 sn\'de bir yenilenir, 10 dk sürer.\nSon güncelleme: '+hhmm(S.now)+':00'}
 function liveStart(){LV={m:{b:1,t:stat()+liveNote(),kb:[['⏹ Durdur','/canli_dur']]},end:S.now+10};msgs.push(LV.m);drawChat()}
 function liveStop(why){if(!LV){return}var m=LV.m;LV=null;m.t=stat()+(why?'\n\n'+why:'');m.kb=[['📡 Tekrar canlı izle','/canli']];drawChat()}
 function liveStep(){if(!LV)return;if(S.pw&&alarm()){liveStop('⏹ Canlı izleme acil durum nedeniyle durdu.');return}if(S.now>=LV.end){liveStop('⏹ Canlı izleme bitti.');return}var t=stat()+liveNote();if(t!==LV.m.t){LV.m.t=t;drawChat()}}
