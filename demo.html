@@ -386,7 +386,7 @@ function scr(){var h=hdr(),H='',p;
  if(sc=='eggs'){hintT='Yeni yumurta sayısını yazın, [Tamam]a basın.';return h+'<div>Yumurta sayısı (şu an '+S.eggs+')</div><div><b style="font-size:20px">'+(S.kp||'—')+'</b></div>'+kpad()+(S.tm?'<div style="color:#ffb4ab">'+S.tm+'</div>':'')+R(B('back','⬅ Geri'))}
  if(sc=='set'){hintT='Ayarlar 7 kutu. Kuluçka sürerken de açılır; Test modu kilitlenir. (Murat Bey: sürüm yazısına 5 kez dokunun.)';var bx=[['test','Test modu'],['kur','Kurutma modu'],['kal','Sıcaklık/nem düzeltmesi'],['ilt','İletişim'],['ges','Geçmiş'],['net','İnternet/TG'],['gun','Güncelleme']];bx.forEach(function(x){H+=B('g:'+x[0],x[1])});return h+R(H)+R(B('back','⬅ Geri'))}
  if(sc=='s_kur'){hintT='Kurutma modu: temizlik sonrası nemi azaltır, küfü önler. 1 saat sürer.';var kb=S.mode?'<div>Kuluçka sürerken kullanılamaz.</div>':'<div class=\"mut\">Kuluçka makinesini uygun koşullarda temizlediyseniz, içerideki nemi azaltmak ve küf oluşumunu önlemek için bu modu kullanın. Mod 1 saat sürer: fan ve sirkülasyon çalışır, ısıtıcı yaklaşık 38°C’ye kadar ısıtır, nemlendirici kapalıdır. Bu sırada yeni kuluçka başlatılamaz; süre dolunca mod kendiliğinden kapanır. Düşük sıcaklık ve nem uyarıları verilmez.</div>'+(S.dry.on?'<div><b>Açık</b> · kalan '+dryLeft()+' dk</div>'+R(B('drystop','Durdur','r')):R(B('dry','Başlat (1 saat)','p')));return h+kb+R(B('gset','⬅ Geri'))}
- if(sc=='s_test'){hintT='Test modu: her çıkışı tek tek dener. Kuluçka sürerken kilitli.';if(S.mode)return h+'<div>Test modu kuluçka sürerken kilitli.</div>'+R(B('gset','⬅ Geri'));var o=[['h1','Isıtıcı 1',1],['h2','Isıtıcı 2',S.hw.heat==2],['cir','Sirkülasyon',1],['fan','Soğutma fanı',S.hw.fan],['nem','Nemlendirici',1],['pmp','Su pompası',S.hw.pump],['viy','Viyol motoru',1],['kab','Kabin ışığı',S.hw.kab],['kon','Kontrol ışığı',S.hw.kon],['sir','Siren',1]];o.forEach(function(x){if(x[2])H+=B('t:'+x[0],x[1]+': '+(S.t[x[0]]?'AÇIK':'kapalı'),S.t[x[0]]?'on':'')});return h+R(H)+R(B('gset','⬅ Geri'))}
+ if(sc=='s_test'){hintT='Test modu: çıkışları tek tek ya da hepsini birden dener; 2 dakika sonra kendiliğinden kapanır. Isıtıcı 2 dakikada sıcaklığı yalnızca biraz yükseltir. Kuluçka sürerken kilitli.';if(S.mode)return h+'<div>Test modu kuluçka sürerken kilitli.</div>'+R(B('gset','⬅ Geri'));var o=[['h1','Isıtıcı 1',1],['h2','Isıtıcı 2',S.hw.heat==2],['cir','Sirkülasyon',1],['fan','Soğutma fanı',S.hw.fan],['nem','Nemlendirici',1],['pmp','Su pompası',S.hw.pump],['viy','Viyol motoru',1],['kab','Kabin ışığı',S.hw.kab],['kon','Kontrol ışığı',S.hw.kon],['sir','Siren',1]];H+=B('tall','⚡ Tüm çıkışlar (hepsi birden)','p');o.forEach(function(x){if(x[2])H+=B('t:'+x[0],x[1]+': '+(S.t[x[0]]?'AÇIK':'kapalı'),S.t[x[0]]?'on':'')});return h+R(H)+R(B('gset','⬅ Geri'))}
  if(sc=='s_kal'){hintT='Sıcaklık ve nem düzeltmesi: sınır ±3°C ve ±%10. 2°C’den büyükse kırmızı uyarı ve "Emin misiniz?" çıkar. Güvenlik eşikleri HAM okumayı kullanır.';var big=0;for(var i=0;i<S.hw.sens;i++){if(Math.abs(S.dc[i])>2)big=1;H+='<div style="border-top:0.5px solid #3b4b60;padding:4px 0"><div>Sensör '+(i+1)+': <b>'+f(r1(S.temp+OFF[i]+S.dc[i]))+'°C</b> <span class="mut">ham '+f(r1(S.temp+OFF[i]))+', düzeltme '+sg(S.dc[i])+'</span></div>'+R(B('c:'+i+':-','-0,1')+B('c:'+i+':+','+0,1')+'<span class="mut">Nem %'+Math.round(S.hum+S.dh[i])+' ('+(S.dh[i]>0?'+':'')+S.dh[i]+')</span>'+B('d:'+i+':-','-1')+B('d:'+i+':+','+1'))+'</div>'}
   if(S.kq)return h+'<div style="background:#7a5200;padding:8px;border-radius:6px">Emin misiniz? Düzeltme 2°C’den büyük; sensör arızalı olabilir.</div>'+R(B('ksave2','Evet, kaydet','r')+B('kno','Vazgeç'));
   return h+(big?'<div style="background:#b3261e;padding:6px;border-radius:6px">⚠ Düzeltme 2°C’den büyük</div>':'')+H+R(B('ksave','Kaydet','p')+B('gset','⬅ Geri'))}
@@ -447,7 +447,8 @@ function act(a){var q=a.split(':');S.tm='';var zi=$('ozn');if(zi&&S.zc)S.zc.name
  else if(a=='hback'){if(S.hc)S.hc='';else if(S.hf!==null)S.hf=null;else S.sc='set'}
  else if(a=='ver'){if(S.sc=='set'){S.vt++;if(S.vt>=5e9){S.vt=0;S.sc='uretpw'}}}
  else if(q[0]=='g'){S.sc='s_'+q[1];S.hf=null;S.hc='';if(q[1]=='kal'){S.dc=S.adj.slice();S.dh=S.hadj.slice();S.kq=0}}
- else if(q[0]=='t'){S.t[q[1]]=S.t[q[1]]?0:1}
+ else if(q[0]=='t'){S.t[q[1]]=S.t[q[1]]?0:1;tmEnd()}
+ else if(a=='tall'){var any=0;for(var kk in S.t)if(S.t[kk])any=1;var al=['h1','h2','cir','fan','nem','pmp','viy','kab','kon','sir'],pr={h2:S.hw.heat==2,fan:S.hw.fan,pmp:S.hw.pump,kab:S.hw.kab,kon:S.hw.kon};S.t={};if(!any)al.forEach(function(x){if(pr[x]===undefined||pr[x])S.t[x]=1});tmEnd()}
  else if(q[0]=='c'){var i=+q[1];S.dc[i]=Math.max(-3,Math.min(3,r1(S.dc[i]+(q[2]=='+'?0.1:-0.1))))}
  else if(q[0]=='d'){var j=+q[1];S.dh[j]=Math.max(-10,Math.min(10,S.dh[j]+(q[2]=='+'?1:-1)))}
  else if(a=='ksave'){var bg=0;S.dc.forEach(function(x){if(Math.abs(x)>2)bg=1});if(bg)S.kq=1;else act('ksave2')}
@@ -481,9 +482,10 @@ function draw(){drawScr();drawChat()}
 function phys(){var amb=22,k=0.0045,g=0.15,d=0,tg=tgtT();
  if(S.door)k=0.06;if(S.cool)k+=0.008;if(S.pw&&S.alHi)k+=0.0035;
  if(S.pw&&(S.mode||S.dry.on)&&!S.cool){var e=tg-S.temp;if(Math.abs(e)<0.5)S.I=Math.max(0,Math.min(0.9,S.I+e*0.01));d=Math.max(0,Math.min(1,e/0.5+S.I));if(S.lock||S.alHi)d=0;if(S.safe)d*=0.5}
+ if(S.pw&&!S.mode&&!S.dry.on&&S.tEnd){var nh=(S.t.h1?1:0)+(S.t.h2&&S.hw.heat==2?1:0);d=(S.lock||S.alHi)?0:nh/S.hw.heat;if(S.t.fan&&S.hw.fan)k+=0.008}
  if(S.pw&&S.ssr)d=1;
  S.duty=d;S.temp+=g*d-k*(S.temp-amb);
- var ht=tgtH();if(S.mode&&S.pw){if(S.hum<ht-1)S.hum+=0.2;else if(S.hum>ht+1)S.hum-=0.06}else if(S.dry.on)S.hum+=(30-S.hum)*0.02;else S.hum+=(45-S.hum)*0.002;if(S.door)S.hum-=0.2;S.hum=Math.max(15,Math.min(98,S.hum))}
+ var ht=tgtH();if(S.mode&&S.pw){if(S.hum<ht-1)S.hum+=0.2;else if(S.hum>ht+1)S.hum-=0.06}else if(S.dry.on)S.hum+=(30-S.hum)*0.02;else if(S.pw&&S.tEnd&&(S.t.nem||(S.t.pmp&&S.hw.pump)))S.hum+=S.t.pmp?0.8:0.2;else S.hum+=(45-S.hum)*0.002;if(S.door)S.hum-=0.2;S.hum=Math.max(15,Math.min(98,S.hum))}
 function alarms(){var T=S.temp,tg=tgtT(),dd=DT(),lk=(S.safe?38.5:39)+dd,ul=(S.safe?38:38.5)+dd;
  if(S.mode&&S.pre&&T>=tg-0.3){S.pre=0}
  if(!S.lock&&T>=lk){S.lock=1;L('Isıtıcı kilitlendi');say('🔒 Isıtıcı kilitlendi ('+f(lk)+'°C). '+f(ul)+'°C’nin altına inince yeniden açılır.')}
@@ -510,7 +512,8 @@ function liveStart(){LV={m:{b:1,t:stat()+liveNote(),kb:[['⏹ Durdur','/canli_du
 function liveStop(why){if(!LV){return}var m=LV.m;LV=null;m.t=stat()+(why?'\n\n'+why:'');m.kb=[['📡 Tekrar canlı izle','/canli']];drawChat()}
 function liveStep(){if(!LV)return;if(S.pw&&alarm()){liveStop('⏹ Canlı izleme acil durum nedeniyle durdu.');return}if(S.now>=LV.end){liveStop('⏹ Canlı izleme bitti.');return}var t=stat()+liveNote();if(t!==LV.m.t){LV.m.t=t;drawChat()}}
 function coolMin(d){return d<=7?5:d<=9?10:d==10?15:d==11?20:25}
-function step(){S.now++;var c=S.now%1440;phys();liveStep();if(!S.pw)return;if(S.dry.on&&S.now>=S.dry.end)dryStop('end');if(S.sup.on&&S.now>=S.sup.until)supEnd();
+function tmEnd(){var any=0;for(var kk in S.t)if(S.t[kk])any=1;S.tEnd=any?S.now+2:0}
+function step(){S.now++;if(S.tEnd&&S.now>=S.tEnd){S.t={};S.tEnd=0}var c=S.now%1440;phys();liveStep();if(!S.pw)return;if(S.dry.on&&S.now>=S.dry.end)dryStop('end');if(S.sup.on&&S.now>=S.sup.until)supEnd();
  if(S.mode){var el=S.now-S.t0,T=TOT[S.mode],nd=Math.min(T,Math.floor(el/1440)+1);if(nd!=S.day){S.day=nd;onDay()}
   if(el>=T*1440&&!S.fin){S.fin=1;L('Süre doldu');say('🏁 Süre doldu.',[['⏱ Ek süre +12 saat','/ek_sure'],['🏁 Şimdi bitir','/bitir']])}
   if(S.ek&&!S.ekDone&&S.now>=S.ekUntil){S.ekDone=1;say('⏱ Ek süre doldu. Kuluçkayı bitirin.',isAdm()?[['🏁 Şimdi bitir','/bitir']]:[])}
