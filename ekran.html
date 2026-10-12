@@ -45,7 +45,7 @@ input,select,button{font-family:inherit}
 <style>
 :root,:root[data-theme="light"],:root[data-theme="dark"]{--bg:#0b0f1a;--surface-1:#161b28;--surface-2:#1e2433;--border:#2a3350;--text-secondary:#9fabc4;--bg-accent:#14304f;--text-accent:#bfe0ff;--fg:#f2f5fb;color-scheme:dark}
 html,body{background:#0b0f1a}
-body{max-width:1100px;padding-inline:12px;font-family:"IBM Plex Sans",system-ui,sans-serif}
+body{max-width:1100px;padding-inline:6px;font-family:"IBM Plex Sans",system-ui,sans-serif}
 .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 @media(max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}}
 .c1,.c2{min-width:0}
@@ -68,18 +68,20 @@ body{max-width:1100px;padding-inline:12px;font-family:"IBM Plex Sans",system-ui,
 .tp{background:#161b28;border:1px solid #2a3350}
 .hint{background:#13294a;border:1px solid #1f3f6b}
 .adv{margin:6px 0}.adv summary{cursor:pointer;color:#9fb0c4;font-size:12px;padding:4px 0}
-.bez{background:#0f1620;border:1px solid #2f3a58;border-radius:18px;padding:8px;margin:8px 7px 16px;box-shadow:0 0 0 6px #070a12,0 0 0 7px #26304b,0 0 50px -10px rgba(74,158,255,.3)}
+.bez{background:#0f1620;border:1px solid #2f3a58;border-radius:18px;padding:7px;margin:8px 6px 16px;box-shadow:0 0 0 6px #070a12,0 0 0 7px #26304b,0 0 50px -10px rgba(74,158,255,.3)}
 .bezin{position:relative;width:100%;aspect-ratio:3/2;overflow:hidden;border-radius:10px;background:#10151c}
 #scr button{padding:5px 8px!important;min-height:28px!important;font-size:12px!important}
 #scr{gap:4px!important;padding:8px!important}
-#scr{position:absolute;left:0;top:0;width:480px;height:320px;min-height:0!important;box-sizing:border-box;overflow:auto;transform-origin:0 0;border-radius:0}
+#scr .hs{gap:3px}
+#scr .hs span{font-size:10.5px;padding:2px 6px}
+#scr{position:absolute;left:0;top:0;width:464px;height:309px;min-height:0!important;box-sizing:border-box;overflow:auto;transform-origin:0 0;border-radius:0}
 .vnote{margin:14px 4px 4px;font-size:12px;color:#8a97b2;text-align:center}
 </style>
 <style>
 .tp,.c2,.hint,.vnote,.tgh{display:none!important}
 .cols{display:block}
-body{max-width:640px;padding:10px 12px 14px}
-.bez{margin:8px 7px 10px}
+body{max-width:640px;padding:10px 6px 14px}
+.bez{margin:8px 6px 10px}
 </style>
 <div class="cols"><div class="c1">
 <div class="hint" id="hint"></div>
@@ -110,7 +112,7 @@ var YA=IZ.concat(['/tur_baslat','/bt','/bs','/bu','/go','/bgeri','/bvaz','/yumur
 var NAV=[['⬅ Ana menü','/menu']];
 var ROLLER='👤 Roller\nAdmin: her şeyi yapar (kuluçkayı iptal eder/bitirir, kişi, WiFi ve token yönetir). En fazla 2 kişi.\nYardımcı: günlük işleri yapar (yumurta sayısı, onay, soğutma/sulama, ışıklar, sustur). Kuluçkayı iptal edemez, kişi/WiFi/token değiştiremez.\nİzleyici: yalnız görür (durum, geçmiş).';
 function outs(){var m=!!(S.pw&&S.mode),wet=!!(S.cool||S.pmpAt===S.now);return {heater:!!(S.pw&&(S.mode||S.dry.on)&&S.duty>0.05&&!wet),circ:!!(S.pw&&(S.mode||S.dry.on)),hum:!!(m&&!wet&&!S.alHi&&S.hum<tgtH()-1),pump:!!(S.hw.pump&&S.pmpAt===S.now),cool:!!(S.hw.fan&&(S.cool||S.alHi)),viyol:m&&phase()==1&&(S.mode!='ozel'||!!S.cu.viy),kab:!!(S.hw.kab&&S.kab),kon:!!(S.hw.kon&&S.kon),siren:!!(S.pw&&alarm()&&!S.sus)}}
-function chips(){var o=outs(),L=[['heater','🔥 Isıtıcı',1],['circ','🌀 Sirkülasyon',1],['hum','💧 Nem',1],['pump','💦 Pompa',S.hw.pump],['cool','❄ Soğutma',S.hw.fan],['viyol','🔄 Viyol',1],['kab','💡 Kabin ışığı',S.hw.kab],['kon','🔦 Kontrol ışığı',S.hw.kon],['siren','🔔 Siren',1]];return '<div class="hs">'+L.filter(function(x){return x[2]}).map(function(x){return '<span'+(o[x[0]]?' class="on"':'')+'>'+x[1]+'</span>'}).join('')+'</div>'}
+function chips(){var o=outs(),L=[['heater','🔥 Isıtıcı',1],['circ','🌀 Sirkülasyon fanı',1],['hum','💧 Nemlendirici',1],['pump','💦 Sulama',S.hw.pump],['cool','❄ Soğutma fanı',S.hw.fan],['viyol','🔄 Yumurta çevirme',1],['kab','💡 Kabin ışığı',S.hw.kab],['kon','🔦 Kontrol ışığı',S.hw.kon],['siren','🔔 Siren',1]];return '<div class="hs">'+L.filter(function(x){return x[2]}).map(function(x){return '<span'+(o[x[0]]?' class="on"':'')+'>'+x[1]+'</span>'}).join('')+'</div>'}
 function elig(t){return t=='kaz'||t=='ordek'||t=='misk'||(t=='ozel'&&S.mode=='ozel'&&(S.sog!='-'||S.su!='-'))}
 function ph(k,w){return '<img src="'+IM[k]+'" alt="'+TN[k]+'" style="display:block;margin-left:auto;width:'+w+'px;height:'+Math.round(w*0.96)+'px;object-fit:cover;border-radius:6px">'}
 function isAdm(){return S.role=='Admin'||(S.role=='Destek'&&S.sup.on)}
@@ -155,13 +157,13 @@ function phase(){if(!S.mode)return 0;if(S.fin)return 3;if(HD()>0&&S.day>=TOT[S.m
 function drawChat(){var h='';msgs.slice(-20).forEach(function(m){h+='<div class="m '+(m.b?'b':'u')+'">'+m.t.replace(/\n/g,'<br>')+'</div>';if(m.b&&m.kb.length&&m===msgs[msgs.length-1]){h+='<div class="kb">';m.kb.forEach(function(k){h+='<button data-c="'+k[1]+'">'+k[0]+'</button>'});h+='</div>'}});$('chat').innerHTML=h;$('chat').scrollTop=99999}
 function stState(){if(alarm())return '🚨 AKTİF ALARM VAR';if(S.safe)return '🛡 Güvenli Mod';if(S.lock)return '🔒 Isıtıcı kilitli';var a=[];if(S.mode){var T=avg(),tg=tgtT(),hd=dh(),th=tgtH();if(T>tg+0.5)a.push('🌡 Sıcaklık hedefin üstünde');else if(T<tg-0.5)a.push('🌡 Sıcaklık hedefin altında');if(hd<th-5)a.push('💧 Nem hedefin altında');else if(hd>th+5)a.push('💧 Nem hedefin üstünde')}return a.length?a.join('\n'):'✅ Normal'}
 function stat(){var t='📊 ULU BEYİN V1.12 - DURUM\n🕐 Saat: '+hhmm(S.now)+'\n';
- if(S.mode){t+=(S.mode=='ozel'?'🧪 ':'🐣 ')+TN[S.mode]+' - '+dT()+(S.ek?' (+12 saat ek süre)':'')+'\n'+(S.mode=='ozel'?'':'🥚 Yumurta: '+S.eggs+'\n')}else t+='Aktif kuluçka yok.\n';
+ if(S.mode){t+=(S.mode=='ozel'?'🧪 ':'🐣 ')+TN[S.mode]+' - '+dT()+(S.ek?' (+12 saat ek süre)':'')+'\n'+(S.mode=='ozel'?'':'🥚 Yumurta sayısı: '+S.eggs+'\n')}else t+='Aktif kuluçka yok.\n';
  var hT=S.mode?' · Hedef '+f(tgtT())+'°C':'',hH=S.mode?' · Hedef %'+tgtH():'';
  t+=S.hw.heat==2?'🌡 Bölge 1: '+f(dsp(0))+'°C · Bölge 2: '+f(dsp(1))+'°C'+hT+'\n':'🌡 Sıcaklık: '+f(avg())+'°C'+hT+'\n';
  t+='💧 Nem: %'+dh()+hH+'\n';
  if(S.mode){if(elig(S.mode))t+='❄ Soğutma: '+lbl(S.sog)+' · 💦 Sulama: '+lbl(S.su)+'\n'}
- if(S.tEnd)t+='🔧 Test modu\n';if(S.dry.on)t+='🧼 Kurutma modu açık (kalan '+dryLeft()+' dk)\n';var o=outs(),T2=S.tEnd?S.t:{},on=[];if(o.heater||T2.h1||T2.h2)on.push(S.hw.heat==2?(T2.h1||T2.h2?(T2.h1&&T2.h2?'Isıtıcı 1, Isıtıcı 2':T2.h1?'Isıtıcı 1':'Isıtıcı 2'):'Isıtıcı'):'Isıtıcı');if(o.circ||T2.cir)on.push('Sirkülasyon');if(o.cool||T2.fan)on.push('Soğutma fanı');if(o.hum||T2.nem)on.push('Nem');if(o.pump||T2.pmp)on.push('Pompa');if(o.viyol||T2.viy)on.push('Viyol');if(o.kab||T2.kab)on.push('Kabin ışığı');if(o.kon||T2.kon)on.push('Kontrol ışığı');if(o.siren||T2.sir)on.push('Siren');
- t+='⚙ Çalışan: '+(on.length?on.join(', '):'hiçbiri')+'\n';
+ if(S.tEnd)t+='🔧 Test modu\n';if(S.dry.on)t+='🧼 Kurutma modu açık (kalan '+dryLeft()+' dk)\n';var o=outs(),T2=S.tEnd?S.t:{},ch=[['Isıtıcı',o.heater||T2.h1||T2.h2,1],['Sirkülasyon fanı',o.circ||T2.cir,1],['Nemlendirici',o.hum||T2.nem,1],['Sulama',o.pump||T2.pmp,S.hw.pump],['Soğutma fanı',o.cool||T2.fan,S.hw.fan],['Yumurta çevirme',o.viyol||T2.viy,1],['Kabin ışığı',o.kab||T2.kab,S.hw.kab],['Kontrol ışığı',o.kon||T2.kon,S.hw.kon],['Siren',o.siren||T2.sir,1]].filter(function(x){return x[2]}),ln='';ch.forEach(function(x,k){ln+=(x[1]?'🟢 ':'⚪ ')+x[0]+((k+1)%2==0?'\n':'   ')});if(ch.length%2)ln+='\n';
+ t+='⚙ Aktif çıkışlar (🟢 çalışıyor):\n'+ln;
  t+='📶 WiFi %'+pct()+'\n';
  return t+stState()}
 function upd(k,t){if(S.off||S.st<4||!S.pw)return;for(var i=msgs.length-1;i>=0;i--){if(msgs[i].k==k){msgs[i].t=t+' (güncellendi '+hhmm(S.now)+')';drawChat();return}}msgs.push({b:1,t:t,kb:[],k:k});drawChat()}
@@ -398,7 +400,7 @@ function scr(){var h=hdr(),H='',p;
  if(sc=='eggs'){hintT='Yeni yumurta sayısını yazın, [Tamam]a basın.';return h+'<div>Yumurta sayısı (şu an '+S.eggs+')</div><div><b style="font-size:20px">'+(S.kp||'—')+'</b></div>'+kpad()+(S.tm?'<div style="color:#ffb4ab">'+S.tm+'</div>':'')+R(B('back','⬅ Geri'))}
  if(sc=='set'){hintT='Ayarlar 7 kutu. Kuluçka sürerken de açılır; Test modu kilitlenir. (Murat Bey: sürüm yazısına 5 kez dokunun.)';var bx=[['test','Test modu'],['kur','Kurutma modu'],['kal','Sıcaklık/nem düzeltmesi'],['ilt','İletişim'],['ges','Geçmiş'],['net','İnternet/TG'],['gun','Güncelleme']];bx.forEach(function(x){H+=B('g:'+x[0],x[1])});return h+R(H)+R(B('back','⬅ Geri'))}
  if(sc=='s_kur'){hintT='Kurutma modu: temizlik sonrası nemi azaltır, küfü önler. 1 saat sürer.';var kb=S.mode?'<div>Kuluçka sürerken kullanılamaz.</div>':'<div class=\"mut\">Kuluçka makinesini uygun koşullarda temizlediyseniz, içerideki nemi azaltmak ve küf oluşumunu önlemek için bu modu kullanın. Mod 1 saat sürer: fan ve sirkülasyon çalışır, ısıtıcı yaklaşık 38°C’ye kadar ısıtır, nemlendirici kapalıdır. Bu sırada yeni kuluçka başlatılamaz; süre dolunca mod kendiliğinden kapanır. Düşük sıcaklık ve nem uyarıları verilmez.</div>'+(S.dry.on?'<div><b>Açık</b> · kalan '+dryLeft()+' dk</div>'+R(B('drystop','Durdur','r')):R(B('dry','Başlat (1 saat)','p')));return h+kb+R(B('gset','⬅ Geri'))}
- if(sc=='s_test'){hintT='Test modu: çıkışları tek tek ya da hepsini birden dener; 2 dakika sonra kendiliğinden kapanır. Isıtıcı 2 dakikada sıcaklığı yalnızca biraz yükseltir. Kuluçka sürerken kilitli.';if(S.mode)return h+'<div>Test modu kuluçka sürerken kilitli.</div>'+R(B('gset','⬅ Geri'));var o=[['h1','Isıtıcı 1',1],['h2','Isıtıcı 2',S.hw.heat==2],['cir','Sirkülasyon',1],['fan','Soğutma fanı',S.hw.fan],['nem','Nemlendirici',1],['pmp','Su pompası',S.hw.pump],['viy','Viyol motoru',1],['kab','Kabin ışığı',S.hw.kab],['kon','Kontrol ışığı',S.hw.kon],['sir','Siren',1]];H+=B('tall','⚡ Tüm çıkışlar (hepsi birden)','p');o.forEach(function(x){if(x[2])H+=B('t:'+x[0],x[1]+': '+(S.t[x[0]]?'AÇIK':'kapalı'),S.t[x[0]]?'on':'')});return h+R(H)+R(B('gset','⬅ Geri'))}
+ if(sc=='s_test'){hintT='Test modu: çıkışları tek tek ya da hepsini birden dener; 2 dakika sonra kendiliğinden kapanır. Isıtıcı 2 dakikada sıcaklığı yalnızca biraz yükseltir. Kuluçka sürerken kilitli.';if(S.mode)return h+'<div>Test modu kuluçka sürerken kilitli.</div>'+R(B('gset','⬅ Geri'));var o=[['h1','Isıtıcı 1',1],['h2','Isıtıcı 2',S.hw.heat==2],['cir','Sirkülasyon fanı',1],['fan','Soğutma fanı',S.hw.fan],['nem','Nemlendirici',1],['pmp','Su pompası',S.hw.pump],['viy','Yumurta çevirme',1],['kab','Kabin ışığı',S.hw.kab],['kon','Kontrol ışığı',S.hw.kon],['sir','Siren',1]];H+=B('tall','⚡ Tüm çıkışlar (hepsi birden)','p');o.forEach(function(x){if(x[2])H+=B('t:'+x[0],x[1]+': '+(S.t[x[0]]?'AÇIK':'kapalı'),S.t[x[0]]?'on':'')});return h+R(H)+R(B('gset','⬅ Geri'))}
  if(sc=='s_kal'){hintT='Sıcaklık ve nem düzeltmesi: sınır ±3°C ve ±%10. 2°C’den büyükse kırmızı uyarı ve "Emin misiniz?" çıkar. Güvenlik eşikleri HAM okumayı kullanır.';var big=0;for(var i=0;i<S.hw.sens;i++){if(Math.abs(S.dc[i])>2)big=1;H+='<div style="border-top:0.5px solid #3b4b60;padding:4px 0"><div>Sensör '+(i+1)+': <b>'+f(r1(S.temp+OFF[i]+S.dc[i]))+'°C</b> <span class="mut">ham '+f(r1(S.temp+OFF[i]))+', düzeltme '+sg(S.dc[i])+'</span></div>'+R(B('c:'+i+':-','-0,1')+B('c:'+i+':+','+0,1')+'<span class="mut">Nem %'+Math.round(S.hum+S.dh[i])+' ('+(S.dh[i]>0?'+':'')+S.dh[i]+')</span>'+B('d:'+i+':-','-1')+B('d:'+i+':+','+1'))+'</div>'}
   if(S.kq)return h+'<div style="background:#7a5200;padding:8px;border-radius:6px">Emin misiniz? Düzeltme 2°C’den büyük; sensör arızalı olabilir.</div>'+R(B('ksave2','Evet, kaydet','r')+B('kno','Vazgeç'));
   return h+(big?'<div style="background:#b3261e;padding:6px;border-radius:6px">⚠ Düzeltme 2°C’den büyük</div>':'')+H+R(B('ksave','Kaydet','p')+B('gset','⬅ Geri'))}
@@ -421,7 +423,7 @@ function scr(){var h=hdr(),H='',p;
  if(S.safe)H+='<div style="background:#7a5200;padding:5px 8px;border-radius:6px">🛡 Güvenli Mod: ısıtıcı gücü yarıya indi, kilit 38,5°C</div>';else if(S.lock)H+='<div style="background:#7a5200;padding:5px 8px;border-radius:6px">🔒 Isıtıcı kilitli, soğuyunca açılır</div>';
  if(S.mode&&p==2&&!S.conf)H+='<div style="background:#1d4f8f;padding:6px 8px;border-radius:6px">🐣 Çıkım dönemi: yumurtaları çıkış sepetine alın, [Onayla]ya basın.</div>';
  if(S.mode&&p==3)H+='<div style="background:#7a5200;padding:6px 8px;border-radius:6px">🏁 Süre doldu: civcivleri alın, sonra [Şimdi bitir]e basın.</div>';
- var r='';if(!S.mode)r+=B('new','Yeni kuluçka','p');else{if(S.mode!='ozel')r+=B('eg','Yumurta');if(p==2&&!S.conf)r+=B('onay','Onayla','p');if(p==3){if(!S.ek)r+=B('ek','Ek süre +12s');r+=B('bitir','Şimdi bitir','r')}if(elig(S.mode)){if(S.sog=='M')r+=B('sog','Soğutma'+(S.cool?' (durdur)':''),S.cool?'on':'');if(S.su=='M')r+=B('sul','Sulama')}r+=B('iptal','İptal')}
+ var r='';if(!S.mode)r+=B('new','Yeni kuluçka','p');else{if(S.mode!='ozel')r+=B('eg','Yumurta sayısı');if(p==2&&!S.conf)r+=B('onay','Onayla','p');if(p==3){if(!S.ek)r+=B('ek','Ek süre +12s');r+=B('bitir','Şimdi bitir','r')}if(elig(S.mode)){if(S.sog=='M')r+=B('sog','Soğutma'+(S.cool?' (durdur)':''),S.cool?'on':'');if(S.su=='M')r+=B('sul','Sulama')}r+=B('iptal','İptal')}
  if(S.safe)r+=B('normal','Normale dön');r+=B('isik','Işıklar')+B('set','Ayarlar');
  if(S.iq)return h+H+'<div>Emin misiniz? Kuluçka iptal edilecek.</div>'+R(B('iptal2','Evet, iptal et','r')+B('iptal0','Vazgeç'));
  return h+H+R(r)+(S.tm?'<div class="mut" style="color:#ffd9a0">'+S.tm+'</div>':'')}
@@ -567,7 +569,7 @@ init();
  document.addEventListener('click',function(e){var b=e.target.closest('[data-hw]');if(b&&!S.mode)act(b.getAttribute('data-hw'));hwUpd()});
  act('start');act('net:Ana_WiFi');act('wcon');act('tok');cmd('/start');act('ok');hwUpd();
  $('b5').textContent='Kurulumdan başla';
- function fit(){var w=$('bezin').clientWidth;if(w)$('scr').style.transform='scale('+(w/480)+')'}
+ function fit(){var w=$('bezin').clientWidth;if(w)$('scr').style.transform='scale('+(w/464)+')'}
  if(window.ResizeObserver)new ResizeObserver(fit).observe($('bezin'));window.addEventListener('load',fit);window.addEventListener('resize',fit);fit();
  function h(){try{parent.postMessage({ub_demo_h:Math.ceil(document.querySelector(".bez").getBoundingClientRect().bottom)+16},'*')}catch(x){}}
  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);window.addEventListener('load',h);setInterval(h,1500);
