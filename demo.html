@@ -194,7 +194,7 @@ function ozCmd(a){var sub=(a[0]||'').toLowerCase(),v=a[1]||'',c=S.cw,nd={ad:1,gu
  if(S.mode){raw('⚠ Zaten aktif kuluçka/mod var. Yeni mod için önce mevcut olanı bitirin ya da iptal edin.');return}
  if(S.dry.on){raw('⚠ Kurutma modu açık. Önce /kurutma_durdur yazın.');return}
  if(!sub){W=null;var kb=[],n=0;S.pz.forEach(function(p,i){if(p){n++;kb.push(['📁 '+p.name+' · '+f(p.t)+'°C %'+p.h,'/oz kullan '+i])}});kb.push(['➕ Yeni özel mod','/oz yeni']);if(n)kb.push(['🗑 Kayıt sil','/oz silmenu']);kb.push(['Vazgeç','/menu']);raw('🧪 Özel mod\n'+INFO+'\n\nKayıtlı modlarınız ('+n+'/10):'+(n?'':' henüz yok.'),kb);return}
- if(nd[sub]&&!c){raw('Özel mod için /oz yazın.');return}
+ if(nd[sub]&&!c){raw('Özel mod için /ozel yazın.');return}
  if(sub=='yeni'){S.cw=cuNew();S.cws=1;cuAsk();return}
  if(sub=='ad'){if(S.cws!=1)return;c.name='Özel';S.cws=cuNext(1,c);cuAsk();return}
  if(sub=='gun'&&S.cws==4){c.days=parseInt(v)||0;if(!c.days)c.hatch=0;S.cws=cuNext(4,c);cuAsk();return}
@@ -207,9 +207,9 @@ function ozCmd(a){var sub=(a[0]||'').toLowerCase(),v=a[1]||'',c=S.cw,nd={ad:1,gu
  if(sub=='silmenu'){var k2=[];S.pz.forEach(function(p,i){if(p)k2.push(['🗑 '+p.name,'/oz sil '+i])});k2.push(['Vazgeç','/oz']);raw('Hangi kayıt silinsin?',k2);return}
  if(sub=='sil'){var q=S.pz[+v];if(!q){raw('Bu kayıt bulunamadı.');return}S.pz[+v]=null;L('Özel mod kaydı silindi: '+q.name);raw('🗑 "'+q.name+'" kaydı silindi.');ozCmd([]);return}
  if((sub=='basla'||sub=='kaydet')&&S.cws==11){var note='';
-  if(sub=='kaydet'){var sl=ozSlot();if(sl<0){raw('⚠ Kayıt yeri dolu (10/10).\nKaydetmeden başlatabilir ya da /oz yazıp bir kaydı silebilirsiniz.');return}S.pz[sl]=cp(c);note='💾 "'+c.name+'" olarak kaydedildi.'}
+  if(sub=='kaydet'){var sl=ozSlot();if(sl<0){raw('⚠ Kayıt yeri dolu (10/10).\nKaydetmeden başlatabilir ya da /ozel yazıp bir kaydı silebilirsiniz.');return}S.pz[sl]=cp(c);note='💾 "'+c.name+'" olarak kaydedildi.'}
   startCustom(c,S.role=='Destek'?'Destek':'Admin');if(note)raw(note);return}
- raw('Özel mod için /oz yazın.')}
+ raw('Özel mod için /ozel yazın.')}
 function startCustom(c,by){c=cp(c);if(!c.name)c.name='Özel';c.sog=(S.hw.fan&&(c.sog=='A'||c.sog=='M'))?c.sog:'-';c.su=(S.hw.pump&&(c.su=='A'||c.su=='M'))?c.su:'-';
  S.cu=c;TN.ozel=c.name;TOT.ozel=c.days>0?c.days:99999;TARGET.ozel=[c.t,c.h,c.hatch>0?c.hh:c.h];S.by=by;S.cw=null;S.cws=0;S.aw='';
  W={t:'ozel',sg:c.sog,su:c.su,e:0,h:[],s:5};startMode()}
@@ -224,7 +224,7 @@ function ozAct(q){var c=S.zc,k=q[1],d=parseFloat(q[2]),cl=function(x,a,b){return
 function ozStart(save){var c=cp(S.zc),sl=-1;
  if(S.mode||S.dry.on){S.tm='Önce mevcut kuluçka/mod bitmeli.';return}
  c.name=c.name.replace(/[|,;\/\u0000-\u001f]/g,'').trim().slice(0,16);
- if(save){sl=ozSlot();if(sl<0){S.tm='Kayıt yeri dolu (10/10). Telegram’dan /oz ile bir kaydı silin ya da kaydetmeden başlatın.';return}if(!c.name)c.name='Özel '+(sl+1);S.pz[sl]=cp(c)}
+ if(save){sl=ozSlot();if(sl<0){S.tm='Kayıt yeri dolu (10/10). Telegram’dan /ozel ile bir kaydı silin ya da kaydetmeden başlatın.';return}if(!c.name)c.name='Özel '+(sl+1);S.pz[sl]=cp(c)}
  startCustom(c,'Ekran');if(save)say('💾 "'+(c.name||'Özel')+'" olarak kaydedildi (ekrandan).')}
 function ozrow(l,v,k,d){var bt=function(x){return B('oz:'+k+':'+x,(x>0?'+':'−')+String(Math.abs(x)).replace('.',','))};return '<div class="row" style="justify-content:space-between"><span>'+l+'</span><span class="row" style="gap:4px">'+d.filter(function(x){return x<0}).map(bt).join('')+'<b style="min-width:62px;text-align:center">'+v+'</b>'+d.filter(function(x){return x>0}).map(bt).join('')+'</span></div>'}
 function oztg(l,k,v){return '<div class="row" style="justify-content:space-between"><span>'+l+'</span>'+B('oz:'+k+':0',v,v=='yok'||v=='kapalı'||v=='çalışmasın'?'':'on')+'</div>'}
@@ -290,7 +290,7 @@ function cmd(t){t=t.trim();var a=t.split(' '),c=a[0].toLowerCase(),arg=a[1];
  case '/kurutma':var er=dryStart();if(er)rr(er);break;
  case '/kurutma_durdur':if(!S.dry.on){rr('Kurutma modu zaten kapalı.');break}dryStop();break;
  case '/tur_baslat':if(S.dry.on){rr('Kurutma modu açık. Önce /kurutma_durdur yazın.',[['⛔ Durdur','/kurutma_durdur']]);break}if(S.mode){rr('⚠ Zaten aktif kuluçka var. Yeni kuluçka için önce iptal etmelisiniz.',isAdm()?[['❌ Kuluçkayı iptal et','/tur_iptal']]:[]);break}W=newW();wsend();break;
- case '/oz':ozCmd(a.slice(1));break;
+ case '/ozel':case '/oz':ozCmd(a.slice(1));break;
  case '/bt':if(!W||S.mode){rr('Önce /tur_baslat yazın.');break}if(arg=='ordek'){wfwd(6);wsend();break}W.t=arg=='ordek2'?'ordek':arg;setupW();afterTur();wsend();break;
  case '/bs':if(!W)break;W.sg=arg;afterSg();wsend();break;
  case '/bu':if(!W)break;W.su=arg;wfwd(4);wsend();break;
@@ -524,7 +524,7 @@ function advance(m){if(m>1440)S.ff=1;S.cntC=0;S.cntP=0;for(var i=0;i<m;i++)step(
 function setTemp(v){S.temp=v;if(S.pw)alarms();draw()}
 function doPower(){if(S.pw){S.pw=0;S.pwAt=S.now;L('Elektrik kesildi')}else{S.pw=1;var dur=S.now-S.pwAt;S.alHi=0;S.alLo=0;S.lock=0;S.I=0;S.cool=0;if(S.mode){var el=S.now-S.t0,T=TOT[S.mode];S.day=Math.min(T,Math.floor(el/1440)+1);if(el>=T*1440)S.fin=1}L('Elektrik geldi (kesinti '+dur+' dk)');say('⚡ Elektrik geldi. Kesinti süresi '+dur+' dk. Cihaz yeniden başladı. Sıcaklık '+f(S.temp)+'°C.');alarms()}draw()}
 function togglePlay(){if(playT){clearInterval(playT);playT=null}else playT=setInterval(function(){advance(15)},400);drawScr()}
-function cmList(){var l=isAdm()?['/durum','/canli','/kulucka','/tur_baslat','/oz','/yumurta','/isik','/soguma_baslat','/sulama_baslat','/sustur','/onayla','/ek_sure','/bitir','/tur_iptal','/gecmis','/kisiler','/roller','/yardimci_ekle','/izleyici_ekle','/admin_ekle','/kisi_cikar','/wifi_ekle','/wifi_sil','/token_guncelle','/ag','/kalib','/kilavuz','/iletisim','/destek','/destek_ac','/destek_kapat','/kurutma','/kurutma_durdur'].concat(S.role=='Destek'?['/guncelle','/uretici_sifre_sifirla','/kara_kutu','/cihaz_bilgi']:[]):S.role=='Yardımcı'?['/durum','/canli','/kulucka','/kurutma','/kurutma_durdur','/tur_baslat','/yumurta','/isik','/soguma_baslat','/sulama_baslat','/sustur','/onayla','/ek_sure','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek']:['/durum','/canli','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek'];var h='';l.forEach(function(x){h+='<button data-c="'+x+'">'+x+'</button>'});return h}
+function cmList(){var l=isAdm()?['/durum','/canli','/kulucka','/tur_baslat','/ozel','/yumurta','/isik','/soguma_baslat','/sulama_baslat','/sustur','/onayla','/ek_sure','/bitir','/tur_iptal','/gecmis','/kisiler','/roller','/yardimci_ekle','/izleyici_ekle','/admin_ekle','/kisi_cikar','/wifi_ekle','/wifi_sil','/token_guncelle','/ag','/kalib','/kilavuz','/iletisim','/destek','/destek_ac','/destek_kapat','/kurutma','/kurutma_durdur'].concat(S.role=='Destek'?['/guncelle','/uretici_sifre_sifirla','/kara_kutu','/cihaz_bilgi']:[]):S.role=='Yardımcı'?['/durum','/canli','/kulucka','/kurutma','/kurutma_durdur','/tur_baslat','/yumurta','/isik','/soguma_baslat','/sulama_baslat','/sustur','/onayla','/ek_sure','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek']:['/durum','/canli','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek'];var h='';l.forEach(function(x){h+='<button data-c="'+x+'">'+x+'</button>'});return h}
 $('scr').onclick=function(e){var t=e.target.closest('[data-a]');if(t)act(t.getAttribute('data-a'))};
 $('chat').onclick=function(e){var c=e.target.getAttribute('data-c');if(c){me(c);cmd(c)}};
 $('cm').onclick=function(e){var c=e.target.getAttribute('data-c');if(c){$('cm').style.display='none';if(c=='/yumurta'||c=='/kisi_cikar'){$('inp').value=c+' ';$('inp').focus()}else{me(c);cmd(c)}}};
