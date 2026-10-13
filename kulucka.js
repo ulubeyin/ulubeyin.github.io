@@ -48,11 +48,11 @@ function cycle(s) {
     if (name === "Özel mod") {
       h = "<h3>Özel mod</h3><div class='sub'>Listede olmayan bir tür için: her değeri siz belirlersiniz. Adını verip kaydedersiniz (10 kayıt).</div><table>" +
         row("Hedef sıcaklık", "25–40 °C (zorunlu, atlanamaz)") + row("Hedef nem", "%20–95") + row("Süre", "1–365 gün ya da süresiz") +
-        row("Çıkım dönemi", "0–7 gün; çıkım sıcaklığı ve nemini siz seçersiniz") +
-        row("Soğutma ve sulama", "Standart ya da kendi başlangıç günü, saati, kaç günde bir ve süreniz (cihazda varsa)") +
+        row("Çıkım dönemi", "En çok 30 gün; çıkım sıcaklığı (hedefin 5 °C altı – 2 °C üstü) ve nemini siz seçersiniz") +
+        row("Soğutma ve sulama", "İkisi ayrı ayarlanır: standart ya da kendi başlangıç günü, son günü, kaç günde bir, saati ve süreniz (cihazda varsa). Manuelse isteğe bağlı günlük hatırlatma gelir") +
         row("Viyol", "Hemen, manuel ya da belirli günde başlat; bitiş gününü seçin") +
         row("Uyarılar", "Sıcaklık ve nem sapma farkını siz seçersiniz") +
-        row("Güvenlik", "Aşırı ısınma ve soğuma alarmları her zaman sabit çalışır") + "</table>";
+        row("Güvenlik", "Aşırı ısınma, çok düşük sıcaklık, sensör ve elektrik alarmları her zaman açıktır; sınırları hedefinize göre kendiliğinden kayar, elle değiştirilemez") + "</table>";
     } else {
       var d = M[name], t = d[1], c = d[4];
       h = "<h3>" + name + "</h3><div class='sub'>Cihazdaki hazır program. Türü seçersiniz, gerisini cihaz yönetir.</div><table>" +
