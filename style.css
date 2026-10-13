@@ -336,10 +336,10 @@ section.hit { animation: sec-pulse 2s ease-out; border-radius: 18px; }
 .hero h1 em { filter: drop-shadow(0 0 22px rgba(120,190,255,.45)); }
 @media (prefers-reduced-motion: no-preference) {
   .lm-base { opacity: .42; }
-  .lm-sig { stroke-dasharray: 16 120; stroke-dashoffset: 16; animation: sigrun 2.8s linear infinite; filter: drop-shadow(0 0 1.2px #bfe0ff); }
-  @keyframes sigrun { 0% { stroke-dashoffset: 16; } 100% { stroke-dashoffset: -100; } }
-  .lm-dot { animation: dotpulse 2.8s ease-in-out infinite; } .lm-d2 { animation-delay: .9s; }
-  @keyframes dotpulse { 0%,100% { opacity: .55; } 30% { opacity: 1; } 60% { opacity: .55; } }
+  .lm-sig { stroke-dasharray: 16 120; stroke-dashoffset: 16; animation: sigrun 5.2s linear infinite; filter: drop-shadow(0 0 1.2px #bfe0ff); }
+  @keyframes sigrun { 0% { stroke-dashoffset: 16; } 50%,100% { stroke-dashoffset: -100; } }
+  .lm-dot { animation: dotpulse 5.2s ease-in-out infinite; } .lm-d2 { animation-delay: .35s; }
+  @keyframes dotpulse { 0%,100% { opacity: .6; } 14% { opacity: 1; } 30% { opacity: .6; } }
   .logo b, .hero h1 em { animation: sweep 5.5s ease-in-out infinite; }
   @keyframes sweep { 0% { background-position: 130% 0; } 55%,100% { background-position: -30% 0; } }
   .hero h1 em { animation: sweep 5.5s ease-in-out infinite, softGlow 5.5s ease-in-out infinite; }
@@ -388,3 +388,8 @@ input[type=tel]:focus, input[type=email]:focus { border-color: var(--glow); outl
 
 /* v11: dar ekranda logo + Sipariş ver aynı satırda kalsın */
 @media (max-width: 480px) { .logo { gap: 8px; } .logo svg { width: 44px; height: 22px; } .logo b { font-size: 1.3rem; letter-spacing: .07em; } }
+
+/* v14: arka plan logosu sakin ve ince; hareket yalnız menü logosunda ve nabız çizgisinde */
+.bgmark { opacity: .5; filter: drop-shadow(0 0 10px rgba(120,190,255,.25)); }
+.bgmark .lm-base { opacity: 1; }
+.bgmark .ring { animation-duration: 5s; }
