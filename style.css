@@ -393,3 +393,49 @@ input[type=tel]:focus, input[type=email]:focus { border-color: var(--glow); outl
 /* v14: arka plan logosu sakin ve ince; hareket yalnız menü logosunda ve nabız çizgisinde */
 .bgmark { opacity: .5; filter: drop-shadow(0 0 10px rgba(120,190,255,.25)); }
 .bgmark .lm-base { opacity: 1; }
+
+/* ---- Kullanım kılavuzu (kilavuz.html) ---- */
+.manual { max-width: 86ch; }
+.manual .lead { font-size: 1.08rem; color: var(--fg); }
+.manual h2 { padding-top: 6px; scroll-margin-top: 80px; }
+.manual ol, .manual ul { padding-left: 1.3em; }
+.manual li { margin: 6px 0; }
+.manual code { font-family: var(--f-mono, monospace); font-size: .88em; background: rgba(74,158,255,.12); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; color: var(--fg); white-space: nowrap; }
+.manual .note { border-left: 3px solid var(--accent); background: rgba(74,158,255,.07); padding: 10px 14px; border-radius: 0 8px 8px 0; }
+.manual .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 6px 16px; margin: 18px 0 8px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); }
+.manual .toc a { color: var(--muted); text-decoration: none; font-size: .95rem; }
+.manual .toc a:hover { color: var(--fg); }
+.manual .tw { overflow-x: auto; margin: 12px 0; }
+.manual table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+.manual th, .manual td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+.manual th { color: var(--fg); font-weight: 600; }
+.manual .print-head { display: none; }
+@media print {
+  @page { size: A4; margin: 16mm 14mm; }
+  body { background: #fff !important; color: #111 !important; padding: 0; font-size: 11pt; }
+  .top, .site-foot, .noprint, .float, .manual .toc { display: none !important; }
+  .legal.manual { max-width: none; padding: 0; }
+  .manual h1 { color: #0b1a33; font-size: 22pt; margin: 6px 0 10px; }
+  .manual h2 { color: #0b3a7a; font-size: 14pt; margin: 18px 0 6px; break-after: avoid; }
+  .manual p, .manual li, .manual td, .manual th { color: #222 !important; }
+  .manual .lead { color: #111 !important; }
+  .manual th { color: #000 !important; }
+  .manual th, .manual td { border-bottom: 1px solid #ccd; }
+  .manual code { background: #eef3fb; border-color: #cbd8ee; color: #0b3a7a; }
+  .manual .note { background: #f1f6fe; border-left-color: #2f7de0; }
+  .manual .eyebrow { color: #2f7de0 !important; }
+  .manual table, .manual li { break-inside: avoid; }
+  .manual h2 + p { break-after: avoid; }
+  .manual .print-head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; margin-bottom: 14px; border-bottom: 2px solid #0b3a7a; }
+  .manual .print-head svg { width: 62px; height: 30px; }
+  #i-mark .lm-base { stroke: #2f7de0 !important; opacity: 1 !important; }
+  #i-mark .lm-sig { display: none; }
+  #i-mark .lm-dot { fill: #2f7de0 !important; opacity: 1 !important; animation: none !important; }
+  .manual section { padding: 0 !important; margin: 0 !important; }
+  .manual p, .manual ul, .manual ol { max-width: none !important; }
+  .manual .print-head b { display: block; font-size: 17pt; letter-spacing: .04em; color: #0b1a33; }
+  .manual .print-head span { font-size: 9pt; color: #55627a; }
+}
+.manual .lead, .manual p { max-width: none; }
+.manual section { padding-block: 22px; }
+.manual .noprint { margin: 14px 0; }
