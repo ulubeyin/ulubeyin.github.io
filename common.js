@@ -60,19 +60,25 @@ function buildScreen(root) {
   };
 }
 
-/* Menü bağlantısına tıklanınca hedef bölüm parlar, menüde seçili kalır */
+/* Menü bağlantıları: sayfa düzeni (resim, demo) sonradan değişse de hedefe tam oturur */
 (function () {
   function hedef(id) { return id ? document.getElementById(id) : null; }
   function vur(id) {
     var el = hedef(id); if (!el || el.tagName !== "SECTION") return;
-    el.classList.remove("pulse"); void el.offsetWidth; el.classList.add("pulse");
-    setTimeout(function () { el.classList.remove("pulse"); }, 2100);
+    el.classList.remove("hit"); void el.offsetWidth; el.classList.add("hit");
+    setTimeout(function () { el.classList.remove("hit"); }, 2100);
     Array.prototype.forEach.call(document.querySelectorAll(".nav a.l"), function (a) { a.classList.toggle("act", a.getAttribute("href") === "#" + id); });
+  }
+  function git(id, anim) {
+    var el = hedef(id); if (!el) return;
+    var de = document.documentElement; de.style.scrollBehavior = "auto";
+    var yap = function () { var h = document.querySelector(".top"); var off = (h ? h.offsetHeight : 70) + 8; window.scrollTo(0, el.getBoundingClientRect().top + window.pageYOffset - off); };
+    yap(); setTimeout(yap, 200); setTimeout(yap, 700); setTimeout(function () { yap(); de.style.scrollBehavior = ""; if (anim) vur(id); }, 1300);
   }
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
     var id = a.getAttribute("href").slice(1); if (!hedef(id)) return;
-    setTimeout(function () { vur(id); }, 450);
+    e.preventDefault(); try { history.replaceState(null, "", "#" + id); } catch (x) {} git(id, true);
   });
-  window.addEventListener("hashchange", function () { setTimeout(function () { vur(location.hash.slice(1)); }, 450); });
+  window.addEventListener("load", function () { if (location.hash.length > 1 && hedef(location.hash.slice(1))) git(location.hash.slice(1), false); });
 })();
