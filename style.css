@@ -329,8 +329,8 @@ section.hit { animation: sec-pulse 2s ease-out; border-radius: 18px; }
   .nav a.l { display: inline !important; }
 }
 /* logo: kalp gibi atar, yazı ışık süpürür */
-.logo svg { width: 38px; height: 38px; filter: drop-shadow(0 0 7px rgba(154,212,255,.9)) drop-shadow(0 0 16px rgba(74,158,255,.45)); transform-origin: 50% 55%; }
-.logo svg path { stroke-width: 2.6; }
+.logo svg { width: 62px; height: 30px; filter: drop-shadow(0 0 7px rgba(154,212,255,.9)) drop-shadow(0 0 16px rgba(74,158,255,.45)); transform-origin: 50% 55%; }
+.logo svg path { stroke-width: 2.3; }
 .logo b, .hero h1 em { background: linear-gradient(100deg, #cfe6ff 0%, #ffffff 38%, #8fd0ff 50%, #ffffff 62%, #cfe6ff 100%); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; text-shadow: none; }
 .logo b { filter: drop-shadow(0 0 10px rgba(74,158,255,.35)); }
 .hero h1 em { filter: drop-shadow(0 0 22px rgba(120,190,255,.45)); }
@@ -357,7 +357,7 @@ section.hit { animation: sec-pulse 2s ease-out; border-radius: 18px; }
 .fgrid a:hover { color: #fff; }
 .fgrid p { margin: 12px 0 0; max-width: 38ch; line-height: 1.55; }
 .fbrand { display: flex; align-items: center; gap: 10px; color: #fff; font: 700 1.4rem var(--f-display); letter-spacing: .09em; }
-.fbrand svg { width: 28px; height: 28px; }
+.fbrand svg { width: 52px; height: 26px; }
 .fbot { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; font-size: .84rem; }
 /* tür kartları */
 button.mode { font: inherit; color: inherit; cursor: pointer; width: 100%; transition: border-color .2s, background .2s, transform .2s; }
@@ -384,3 +384,6 @@ input[type=tel]:focus, input[type=email]:focus { border-color: var(--glow); outl
 .legal h1 { font-size: 2.6rem; margin: 10px 0 24px; }
 .legal h2 { font-size: 1.5rem; margin: 40px 0 10px; }
 .legal p, .legal li { color: var(--muted); line-height: 1.65; }
+
+/* v11: dar ekranda logo + Sipariş ver aynı satırda kalsın */
+@media (max-width: 480px) { .logo { gap: 8px; } .logo svg { width: 44px; height: 22px; } .logo b { font-size: 1.3rem; letter-spacing: .07em; } }
