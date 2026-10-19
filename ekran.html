@@ -92,7 +92,7 @@ body{max-width:640px;padding:10px 6px 14px}
 <div class="bez"><div class="bezin" id="bezin"><div class="dev" id="scr"></div></div></div>
 <div class="tp">
 <div id="clk" style="font-weight:500"></div>
-<div class="g"><span class="l">Zaman</span><button id="t10">+10 dk</button><button id="t60">+1 saat</button><button id="t1d">+1 gün</button><button id="t3d">+3 gün</button><button id="tcik">Çıkıma atla</button><button id="tplay">▶ Oynat</button></div>
+<div class="g"><span class="l">Zaman</span><button id="t10">+10 dk</button><button id="t60">+1 saat</button><button id="t1d">+1 gün</button><button id="t3d">+3 gün</button><button id="tcik">Çıkıma atla</button><button id="tplay">▶ Oynat</button><button id="snd_t">🔊 Alarm sesi: açık</button></div>
 <details class="adv"><summary>Gelişmiş deneme: olay, donanım, sıcaklık</summary><div class="g"><span class="l">Olay</span><button id="e_door">Kapıyı aç</button><button id="e_pw">Elektrik kes</button><button id="e_ssr">Isıtıcı arızası</button><button id="e_hedef">Hedefe getir</button><button id="e_rst">Cihaz kendi kendine resetlensin</button></div>
 <div class="g"><span class="l">Donanım</span><button data-hw="u:h2" id="hw_h">İkinci ısıtıcı</button><button data-hw="u:fan">Soğutma fanı</button><button data-hw="u:pump">Su pompası</button><button data-hw="u:kab">Kabin ışığı</button><button data-hw="u:kon">Kontrol ışığı</button><span class="mut" style="flex-basis:100%">Donanım kurulumda seçilir; kuluçka sürerken değişmez. Ekran ve menüler buna göre değişir.</span></div>
 <div class="g"><span class="l">Sıcaklık</span><input type="range" id="tsl" min="15" max="46" step="0.1" value="24" style="width:150px"><b id="tsv">24,0°C</b></div>
@@ -117,7 +117,7 @@ var NAV=[['⬅ Ana menü','/menu']];
 var ROLLER='👤 Roller\nAdmin: her şeyi yapar (kuluçkayı iptal eder/bitirir, kişi, WiFi ve token yönetir). En fazla 2 kişi.\nYardımcı: günlük işleri yapar; kuluçka ve Özel mod başlatır (yumurta sayısı, onay, ek süre, soğutma/sulama, ışıklar, sustur). Kuluçkayı iptal edemez, bitiremez, kayıtlı özel modu silemez; kişi/WiFi/token değiştiremez.\nİzleyici: yalnız görür (durum, geçmiş).';
 function pumpOn(){return !!(S.pmpUntil&&Date.now()<S.pmpUntil)}
 function pumpLeft(){return Math.max(0,Math.ceil((S.pmpUntil-Date.now())/1000))}
-function outs0(){var m=!!(S.pw&&S.mode),wet=!!(S.cool||pumpOn());return {heater:!!(S.pw&&(S.mode||S.dry.on)&&S.duty>0.05&&!wet),circ:!!(S.pw&&(S.mode||S.dry.on)),hum:!!(m&&!wet&&!S.alHi&&S.hum<tgtH()-1),pump:!!(S.hw.pump&&pumpOn()),cool:!!(S.hw.fan&&(S.cool||S.alHi)),viyol:m&&phase()==1&&viyAllowed(),kab:!!(S.hw.kab&&S.kab),kon:!!(S.hw.kon&&S.kon),siren:!!(S.pw&&alarm()&&!S.sus)}}
+function outs0(){var m=!!(S.pw&&S.mode),wet=!!(S.cool||pumpOn());return {heater:!!(S.pw&&(S.mode||S.dry.on)&&S.duty>0.05&&!wet),circ:!!(S.pw&&(S.mode||S.dry.on)),hum:!!(m&&!wet&&!S.alHi&&S.hum<tgtH()-1),pump:!!(S.hw.pump&&pumpOn()),cool:!!(S.hw.fan&&(S.cool||S.alHi)),viyol:m&&phase()==1&&viyAllowed(),kab:!!(S.hw.kab&&S.kab),kon:!!(S.hw.kon&&S.kon),siren:!!(S.pw&&((alarm()&&!S.sus&&!quiet())||Date.now()<(S.sirenUntil||0)))}}
 var MN={heater:'Isıtıcı',circ:'Sirkülasyon fanı',hum:'Nemlendirici',pump:'Su pompası',cool:'Soğutma fanı',viyol:'Yumurta çevirme'},MA={heater:'Isıtıcıyı',circ:'Sirkülasyon fanını',hum:'Nemlendiriciyi',pump:'Su pompasını',cool:'Soğutma fanını',viyol:'Yumurta çevirmeyi'},ML={heater:'ısıtıcı',circ:'sirkülasyon fanı',hum:'nemlendirici',pump:'su pompası',cool:'soğutma fanı',viyol:'yumurta çevirme'},MK={isitici:'heater',sirkulasyon:'circ',nemlendirici:'hum',pompa:'pump',sogutma:'cool',viyol:'viyol'},MOFF=30,MON=2,MEV=10;
 function manAvail(k){if(!S.mode||!S.pw)return false;if(k=='pump')return !!S.hw.pump;if(k=='cool')return !!S.hw.fan;return true}
 function manUsed(k){if(k=='pump'||k=='cool')return elig(S.mode);return true}
@@ -127,38 +127,44 @@ function manTap(k){
  if(k=='siren'){if(alarm()&&!S.sus)cmd('/sustur');else S.tm='Siren şu an çalmıyor.';return}
  if(!MN[k]||!manAvail(k))return;
  var cur=!!outs()[k];
- if(k=='heater'&&!cur&&(S.lock||S.alHi)){S.tm='🔒 Güvenlik kilidi açık: ısıtıcı elle açılamaz.';return}
+ if(k=='heater'&&!cur&&(S.lock||S.alHi)){S.tm='🔒 Güvenlik kilidi açık: ısıtıcı manuel açılamaz.';return}
  S.mq={k:k,on:!cur}}
 function manQT(){var q=S.mq,k=q.k,n=MN[k],used=manUsed(k),act=q.on?'açmak':'kapatmak';
- var t=used?TN[S.mode]+' modu aktif. '+MA[k]+' '+act+' istediğinize emin misiniz?':TN[S.mode]+' modunda '+ML[k]+' kullanılmıyor. Elle '+act+' istediğinize emin misiniz?';
- var note=n+(q.on?' elle açılırsa '+MON+' dk sonra otomatik kapanır.':' kapatılırsa '+MOFF+' dk sonra otomatik açılır.')+' '+MEV+' dk\'da bir mesaj gider ve bip öter.';
+ var t=used?TN[S.mode]+' modu aktif. '+MA[k]+' '+act+' istediğinize emin misiniz?':TN[S.mode]+' modunda '+ML[k]+' kullanılmıyor. Manuel olarak '+act+' istediğinize emin misiniz?';
+ var note=n+(q.on?' manuel açılırsa '+MON+' dk sonra otomatik kapanır.':' kapatılırsa '+MOFF+' dk sonra otomatik açılır.')+' '+MEV+' dk\'da bir mesaj gelir ve alarm öter.';
  return [t,note]}
 function manQ(){var a=manQT();return '<div class="row hd"><b>Onay</b></div><div style="background:#7a5200;padding:8px;border-radius:6px;font-size:14px">'+a[0]+'</div><div class="mut" style="font-size:12px;color:#ffd9a0">'+a[1]+'</div>'+R(B('mqy','Evet','p')+B('mqn','Hayır'))}
 function manApply(){var q=S.mq;S.mq=null;if(!q||!S.mode||!S.pw)return false;var k=q.k;
- if(k=='heater'&&q.on&&(S.lock||S.alHi)){S.tm='🔒 Güvenlik kilidi açık: ısıtıcı elle açılamaz.';say('🔒 Isıtıcı elle açılamadı: güvenlik kilidi/alarm açık.');return false}
+ if(k=='heater'&&q.on&&(S.lock||S.alHi)){S.tm='🔒 Güvenlik kilidi açık: ısıtıcı manuel açılamaz.';say('🔒 Isıtıcı manuel açılamadı: güvenlik kilidi/alarm açık.');return false}
  var auto=!!outs0()[k];
- if(q.on===auto){delete S.man[k];L('Elle müdahale bitti: '+MN[k]);say('↩ '+MN[k]+' otomatik moda döndü.');return true}
+ if(q.on===auto){delete S.man[k];L('Manuel müdahale bitti: '+MN[k]);say('↩ '+MN[k]+' otomatik moda döndü.');return true}
  S.man[k]={on:q.on,until:S.now+(q.on?MON:MOFF),next:S.now+MEV};
- L('Elle müdahale: '+MN[k]+(q.on?' açıldı':' kapatıldı'));
- say('🖐 Elle müdahale: '+MN[k]+(q.on?' elle açıldı. ':' elle kapatıldı. ')+(q.on?MON:MOFF)+' dk sonra otomatik '+(q.on?'kapanır':'açılır')+'. '+MEV+' dk\'da bir mesaj gelir. Güvenlik alarmları her zaman açıktır.',[['↩ Otomatiğe dön','/elle_bitir']]);
+ L('Manuel müdahale: '+MN[k]+(q.on?' açıldı':' kapatıldı'));
+ say('🖐 Manuel müdahale: '+MN[k]+(q.on?' manuel açıldı. ':' manuel kapatıldı. ')+(q.on?MON:MOFF)+' dk sonra otomatik '+(q.on?'kapanır':'açılır')+'. '+MEV+' dk\'da bir mesaj gelir. Güvenlik alarmları her zaman açıktır.',[['↩ Otomatiğe dön','/manuel_bitir']]);
  return true}
-function manBeep(){if(S.ff)return;S.beep=Date.now();for(var i=0;i<3;i++)setTimeout(function(){try{if(!window._ac)window._ac=new (window.AudioContext||window.webkitAudioContext)();var c=window._ac,o=c.createOscillator(),g=c.createGain();o.frequency.value=2300;g.gain.value=0.07;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+0.3)}catch(e){}},i*1000)}
+var SND=1,_sir=null,_lastW=0;
+function acx(){if(!window._ac)window._ac=new (window.AudioContext||window.webkitAudioContext)();if(window._ac.state=='suspended')window._ac.resume();return window._ac}
+function alarmTone(sec){var c=acx(),o=c.createOscillator(),g=c.createGain(),t=c.currentTime;o.type='square';g.gain.value=0.05;for(var n=0;n<Math.round(sec/0.25);n++)o.frequency.setValueAtTime(n%2?1800:2400,t+n*0.25);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+sec);return o}
+function warnSound(){if(S.ff)return;var now=Date.now();S.beep=now;S.sirenUntil=now+3000;if(SND&&now-_lastW>=3200){_lastW=now;try{alarmTone(3)}catch(x){}}setTimeout(function(){if(typeof drawScr=='function')drawScr()},3100);drawScr()}
+function sirenLoop(){if(typeof S==='undefined'||!S)return;var want=SND&&!S.ff&&S.pw&&alarm()&&!S.sus&&!quiet()&&!document.hidden;if(want&&!_sir){try{_sir=alarmTone(600)}catch(x){_sir=null}}else if(!want&&_sir){try{_sir.stop()}catch(x){}_sir=null}}
+setInterval(sirenLoop,500);
+function sndToggle(){SND=SND?0:1;if(!SND&&_sir){try{_sir.stop()}catch(x){}_sir=null}var b=document.getElementById('snd_t');if(b)b.textContent=SND?'🔊 Alarm sesi: açık':'🔇 Alarm sesi: kapalı';if(SND){try{alarmTone(0.5)}catch(x){}}}
 function manStep(){
  if(!S.mode){S.man={};S.mq=null;return}
  for(var k in S.man){var m=S.man[k];
-  if(S.now>=m.until){delete S.man[k];L('Elle müdahale süresi bitti: '+MN[k]);say('↩ '+MN[k]+' otomatik moda döndü.');manBeep();continue}
-  if(S.now>=m.next){m.next+=MEV;say('⏰ '+MN[k]+' hâlâ elle '+(m.on?'açık':'kapalı')+'. '+(m.until-S.now)+' dk sonra otomatik '+(m.on?'kapanır':'açılacak')+'.',[['↩ Otomatiğe dön','/elle_bitir']]);manBeep()}}}
-function manBanner(){var h='';for(var k in S.man){var m=S.man[k];h+='<div style="background:#7a5200;padding:5px 8px;border-radius:6px">🖐 MANUEL: '+MN[k]+' elle '+(m.on?'açık':'kapalı')+', '+Math.max(0,m.until-S.now)+' dk sonra otomatik '+(m.on?'kapanır':'açılır')+(Date.now()-(S.beep||0)<3000?' 🔔':'')+'</div>'}return h}
-function manEnd(rr){var n=Object.keys(S.man).length;S.man={};S.mq=null;if(n)L('Elle müdahale bitti');rr(n?'↩ Elle müdahaleler bitti, cihaz otomatiğe döndü.':'Elle müdahale yok.')}
+  if(S.now>=m.until){delete S.man[k];L('Manuel müdahale süresi bitti: '+MN[k]);say('↩ '+MN[k]+' otomatik moda döndü.');warnSound();continue}
+  if(S.now>=m.next){m.next+=MEV;say('⏰ '+MN[k]+' hâlâ manuel '+(m.on?'açık':'kapalı')+'. '+(m.until-S.now)+' dk sonra otomatik '+(m.on?'kapanır':'açılacak')+'.',[['↩ Otomatiğe dön','/manuel_bitir']]);warnSound()}}}
+function manBanner(){var h='';for(var k in S.man){var m=S.man[k];h+='<div style="background:#7a5200;padding:5px 8px;border-radius:6px">🖐 MANUEL: '+MN[k]+' '+(m.on?'açık':'kapalı')+', '+Math.max(0,m.until-S.now)+' dk sonra otomatik '+(m.on?'kapanır':'açılır')+(Date.now()-(S.beep||0)<3000?' 🔔':'')+'</div>'}return h}
+function manEnd(rr){var n=Object.keys(S.man).length;S.man={};S.mq=null;if(n)L('Manuel müdahale bitti');rr(n?'↩ Manuel müdahaleler bitti, cihaz otomatiğe döndü.':'Manuel müdahale yok.')}
 function manCmd(x,y,rr){
- if(!S.mode){rr('Elle müdahale için aktif bir kuluçka gerekir.');return}
+ if(!S.mode){rr('Manuel müdahale için aktif bir kuluçka gerekir.');return}
  var k=MK[(x||'').toLowerCase()];
- if(!k||!manAvail(k)){var kb=[];['heater','circ','hum','pump','cool','viyol'].forEach(function(z){if(manAvail(z)){var cur=!!outs()[z],w=Object.keys(MK).filter(function(v){return MK[v]==z})[0];kb.push([(cur?'⏹ ':'▶ ')+MN[z]+(cur?' kapat':' aç'),'/elle '+w+(cur?' kapat':' ac')])}});rr('🖐 Elle müdahale\nHangi çıkışı elle açıp kapatmak istiyorsunuz? Süre bitince cihaz otomatiğe döner. Güvenlik alarmları her zaman açıktır.',kb);return}
+ if(!k||!manAvail(k)){var kb=[];['heater','circ','hum','pump','cool','viyol'].forEach(function(z){if(manAvail(z)){var cur=!!outs()[z],w=Object.keys(MK).filter(function(v){return MK[v]==z})[0];kb.push([(cur?'⏹ ':'▶ ')+MN[z]+(cur?' kapat':' aç'),'/manuel '+w+(cur?' kapat':' ac')])}});rr('🖐 Manuel müdahale\nHangi çıkışı manuel açıp kapatmak istiyorsunuz? Süre bitince cihaz otomatiğe döner. Güvenlik alarmları her zaman açıktır.',kb);return}
  var cur=!!outs()[k],want=y?/^(ac|aç|on)/i.test(y):!cur;
  if(want===cur){rr(MN[k]+' zaten '+(cur?'açık':'kapalı')+'.');return}
- if(k=='heater'&&want&&(S.lock||S.alHi)){rr('🔒 Güvenlik kilidi/alarm açık: ısıtıcı elle açılamaz.');return}
+ if(k=='heater'&&want&&(S.lock||S.alHi)){rr('🔒 Güvenlik kilidi/alarm açık: ısıtıcı manuel açılamaz.');return}
  S.mq={k:k,on:want};var a=manQT();
- rr('❓ '+a[0]+'\n\n'+a[1],[['✅ Evet','/elle_evet'],['❌ Hayır','/elle_hayir']])}
+ rr('❓ '+a[0]+'\n\n'+a[1],[['✅ Evet','/manuel_evet'],['❌ Hayır','/manuel_hayir']])}
 function chips(){var o=outs(),L=[['heater','🔥 Isıtıcı',1],['circ','🌀 Sirkülasyon fanı',1],['hum','💧 Nemlendirici',1],['pump','💦 Sulama',S.hw.pump],['cool','❄ Soğutma fanı',S.hw.fan],['viyol','🔄 Yumurta çevirme',1],['kab','💡 Kabin ışığı',S.hw.kab],['kon','🔦 Kontrol ışığı',S.hw.kon],['siren','🔔 Siren',1]];return '<div class="hs">'+L.filter(function(x){return x[2]}).map(function(x){var mm=S.man&&S.man[x[0]];return '<span data-a="man:'+x[0]+'" style="cursor:pointer'+(mm?';outline:1px dashed #ffb74d':'')+'"'+(o[x[0]]?' class="on"':'')+'>'+x[1]+(mm?' ✋':'')+'</span>'}).join('')+'</div>'}
 function elig(t){return t=='kaz'||t=='ordek'||t=='misk'||(t=='ozel'&&S.mode=='ozel'&&(S.sog!='-'||S.su!='-'))}
 function ph(k,w){return '<img src="'+IM[k]+'" alt="'+TN[k]+'" style="display:block;margin-left:auto;width:'+w+'px;height:'+Math.round(w*0.96)+'px;object-fit:cover;border-radius:6px">'}
@@ -200,7 +206,7 @@ function cnts(l){var c={alarm:0,sogsul:0,duz:0,diger:0};l.forEach(function(x){c[
 function fmtL(l,c){var a=l.filter(function(x){return !c||c=='all'||x.c==c});return a.length?a.map(function(x){return (x.d?'Gün '+x.d+' ':'')+x.h+' '+x.t}).join('\n'):'Kayıt yok.'}
 function fsum(r){if(r=='gen')return 'Genel kayıtlar (kuluçka dışı olaylar)';return (r.nm||TN[r.tur])+' #'+r.id+'\nBaşlangıç: '+dl(r.start)+'\nBitiş: '+(r.end?dl(r.end):'sürüyor')+(r.tur=='ozel'?'':'\nYumurta: '+r.eggs)+'\nDurum: '+r.st}
 function raw(t,kb){msgs.push({b:1,t:t,kb:kb||[]});drawChat()}
-function say(t,kb){if(S.off||S.st<4||!S.pw)return;raw(t,kb)}
+function say(t,kb){if(S.off||S.st<4||!S.pw)return;raw(t,kb);if(/^(⚠|🔒|🛡)/.test(t))warnSound()}
 function me(t){msgs.push({b:0,t:t});drawChat()}
 function phase(){if(!S.mode)return 0;if(S.fin)return 3;if(HD()>0&&S.day>=TOT[S.mode]-HD()+1)return 2;return 1}
 function drawChat(){var h='';msgs.slice(-80).forEach(function(m){h+='<div class="m '+(m.b?'b':'u')+'">'+m.t.replace(/\n/g,'<br>')+'</div>';if(m.b&&m.kb.length&&m===msgs[msgs.length-1]){h+='<div class="kb">';m.kb.forEach(function(k){if(Array.isArray(k[0])){k.forEach(function(b){h+='<button data-c="'+b[1]+'">'+b[0]+'</button>'});h+='<span style="flex-basis:100%;height:0"></span>'}else h+='<button data-c="'+k[1]+'">'+k[0]+'</button>'});h+='</div>'}});var c=$('chat'),near=c.scrollHeight-c.scrollTop-c.clientHeight<120,old=c.scrollTop,nm=msgs.length!=window._lastN;window._lastN=msgs.length;c.innerHTML=h;c.scrollTop=(near||nm)?99999:old}
@@ -479,10 +485,10 @@ function cmd(t){window._src=0;t=t.trim();if(t&&t[0]!='/'&&!S.aw){var kc=knownCmd
  case '/yumurta':if(!S.mode){rr('Aktif kuluçka yok.');break}if(S.mode=='ozel'){rr('Özel modda yumurta sayısı tutulmaz.');break}if(arg&&parseInt(arg)>0){S.eggs=parseInt(arg);L('Yumurta sayısı: '+S.eggs);rr('🥚 Yumurta sayısı: '+S.eggs)}else{S.aw='egg';rr('🥚 Şu an: '+S.eggs+'\nYeni sayıyı yazıp gönderin (örnek: 95).')}break;
  case '/onayla':if(phase()!=2){rr('Onay şu an gerekmiyor.');break}S.conf=1;rr('✅ Onaylandı: yumurtalar çıkış sepetinde. Hatırlatma durdu.');break;
  case '/ek_sure':if(phase()!=3||S.ek){rr('Ek süre şu an verilemez.');break}S.ek=1;S.ekUntil=S.now+720;L('Ek süre +12 saat');rr('⏱ 12 saat ek süre verildi (bir kez verilebilir).');break;
- case '/elle':manCmd(a[1],a[2],rr);break;
- case '/elle_evet':if(!S.mq){rr('Bekleyen elle müdahale yok.');break}manApply();break;
- case '/elle_hayir':S.mq=null;rr('Tamam, bir şey değişmedi.');break;
- case '/elle_bitir':manEnd(rr);break;
+ case '/manuel':manCmd(a[1],a[2],rr);break;
+ case '/manuel_evet':if(!S.mq){rr('Bekleyen manuel müdahale yok.');break}manApply();break;
+ case '/manuel_hayir':S.mq=null;rr('Tamam, bir şey değişmedi.');break;
+ case '/manuel_bitir':manEnd(rr);break;
  case '/bitir':if(!S.mode)break;L('Kuluçka bitirildi');endRun('bitti');S.mode=null;rr('🏁 Kuluçka bitirildi. Geçmişe kaydedildi.');break;
  case '/iptal':if(!S.mode){rr('Aktif kuluçka yok.');break}rr('Emin misiniz? Kuluçka iptal edilecek.',[['Evet, iptal et','/iptal_evet']]);break;
  case '/iptal_evet':if(!S.mode)break;L('Kuluçka iptal edildi');endRun('iptal');S.mode=null;S.sc='home';rr('❌ Kuluçka iptal edildi.');break;
@@ -492,7 +498,7 @@ function cmd(t){window._src=0;t=t.trim();if(t&&t[0]!='/'&&!S.aw){var kc=knownCmd
  case '/kabin':case '/kontrol':var k=c=='/kabin'?'kab':'kon';if(S.dry.on&&!S[k]){rr('⚠ Kurutma modu sürerken ışıklar açılmaz.');break}if(!S.hw[k]){rr('Bu cihazda '+(k=='kab'?'kabin':'kontrol')+' ışığı yok.');break}S[k]=S[k]?0:1;rr((k=='kab'?'Kabin ışığı ':'Kontrol ışığı ')+(S[k]?'açıldı':'kapatıldı'),[[S[k]?'Kapat':'Aç',c]]);break;
  case '/isik':if(!S.hw.kab&&!S.hw.kon){rr('Bu cihazda ışık yok.');break}var lk=[];if(S.hw.kab)lk.push([S.kab?'Kabin ışığı kapat':'Kabin ışığı aç','/kabin']);if(S.hw.kon)lk.push([S.kon?'Kontrol ışığı kapat':'Kontrol ışığı aç','/kontrol']);rr('💡 Işıklar'+(S.hw.kab?'\nKabin ışığı: '+(S.kab?'açık':'kapalı'):'')+(S.hw.kon?'\nKontrol ışığı: '+(S.kon?'açık':'kapalı'):''),lk);break;
  case '/hatirlat':if(arg=='0'||arg=='1'){S.noRem=arg=='0';rr(arg=='0'?'🔕 Manuel soğutma/sulama hatırlatması kapatıldı. Açmak için /hatirlat 1':'🔔 Manuel soğutma/sulama hatırlatması açıldı.')}else rr('Manuel soğutma/sulama hatırlatması şu an '+(S.noRem?'kapalı':'açık')+'. Günde bir kez, saat 12:00\'de gelir.',[['🔔 Aç','/hatirlat 1'],['🔕 Kapat','/hatirlat 0']]);break;
- case '/sustur':if(!alarm()){rr('Şu an susturulacak bir alarm yok.');break}S.sus=1;rr('🔇 Siren susturuldu. Alarm sürerse 30 dk sonra yeniden çalar. Alarm bitince bu ayar kendiliğinden sıfırlanır.');break;
+ case '/sustur':if(!alarm()){rr('Şu an susturulacak bir alarm yok.');break}S.sus=1;S.sirenUntil=0;rr('🔇 Siren susturuldu. Alarm sürerse 30 dk sonra yeniden çalar. Alarm bitince bu ayar kendiliğinden sıfırlanır.');break;
  case '/normale_don':S.safe=0;S.hits=[];L('Güvenli Mod kapatıldı');rr('✅ Normal moda dönüldü.');break;
  case '/bakim':rr('🛠 Bakım',[['Sıcaklık ve nem düzeltmesi','/kalibrasyon'],['Viyol','/viyol'],['Yeniden başlat','/yeniden_baslat']].concat(S.safe?[['Güvenli Mod’dan çık','/normale_don']]:[]));break;
  case '/kalibrasyon':rr('Sıcaklık ve nem düzeltmesi\n'+[0,1,2].slice(0,S.hw.sens).map(function(i){return 'Sensör '+(i+1)+': '+f(dsp(i))+'°C, nem %'+Math.round(S.hum+S.hadj[i])+' (düzeltme '+sg(S.adj[i])+'°C, '+(S.hadj[i]>0?'+':'')+S.hadj[i]+'%)'}).join('\n')+'\nSınır ±3°C ve ±%10. Değiştirmek için cihaz ekranı: Ayarlar > Sıcaklık/nem düzeltmesi.');break;
@@ -558,7 +564,7 @@ function hdr(){return '<div class="row" style="justify-content:space-between"><s
 function kpad(){var h='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px">';'123456789'.split('').forEach(function(d){h+=B('k:'+d,d)});return h+B('k:del','Sil')+B('k:0','0')+B('k:ok','Tamam','p')+'</div>'}
 function scr(){var h=hdr(),H='',p;
  if(!S.pw){hintT='Elektrik kesildi: cihaz kapalı. Telegram’a mesaj gitmez. "Elektrik ver" ile geri gelir.';return '<div style="flex:1;display:flex;align-items:center;justify-content:center;color:#556;font-size:15px;min-height:200px">Ekran kapalı (elektrik yok)</div>'}
- if(alarm()){var lo=S.alLo;hintT='ALARM! Ekran uyumaz. Sıcaklık sınırın dışında olduğu sürece alarm sürer (41, 45°C’de de). [Sustur] yalnız sireni susturur; 30 dk sonra alarm sürerse yeniden çalar.';return hdr()+'<div style="background:#b3261e;border-radius:8px;padding:12px;text-align:center"><div class="big">'+f(S.temp)+'°C</div><div style="font-size:15px;margin-top:4px">'+(lo?'ACİL: ÇOK DÜŞÜK SICAKLIK':'ACİL: '+f(HI())+'°C VE ÜSTÜ! ISITICI KAPANDI, FANLAR AÇIK')+'</div><div class="mut" style="color:#fff">'+(quiet()?'Siren: soğutma/sulama nedeniyle 1 saat sessiz':S.sus?'Siren: susturuldu':'Siren: ÇALIYOR')+'</div></div>'+(quiet()?'':R(B('sus','Sustur','r')))+'<div class="mut">Hedef '+f(tgtT())+'°C</div>'}
+ if(alarm()){var lo=S.alLo;hintT='ALARM! Ekran uyumaz. Sıcaklık sınırın dışında olduğu sürece alarm sürer (41, 45°C’de de). [Sustur] yalnız sireni susturur; 30 dk sonra alarm sürerse yeniden çalar.';return hdr()+'<div style="background:#b3261e;border-radius:8px;padding:12px;text-align:center"><div class="big">'+f(S.temp)+'°C</div><div style="font-size:15px;margin-top:4px">'+(lo?'ACİL: ÇOK DÜŞÜK SICAKLIK':'ACİL: '+f(HI())+'°C VE ÜSTÜ! ISITICI KAPANDI, FANLAR AÇIK')+'</div><div class="mut" style="color:#fff">'+(quiet()?'Siren: soğutma/sulama nedeniyle 1 saat sessiz':S.sus?'Siren: susturuldu':'Siren: ÇALIYOR')+'</div></div>'+(quiet()?'':R(B('sus','Sustur','r')))+(S.mode?chips():'')+'<div class="mut">Hedef '+f(tgtT())+'°C</div>'}
  if(S.st<4){
   if(S.st==0){hintT='Cihazı prize taktınız. Ekranda karşılama çıkar. [Başla] düğmesine dokunun.';return h+'<div style="flex:1;text-align:center;padding:30px 0"><div class="big" style="font-size:24px">Hoş geldiniz</div><div class="mut">ULU BEYİN kuluçka kontrol cihazı</div></div>'+R(B('start','Başla','p'))}
   if(S.st==1&&S.sub!='pw'){hintT='WiFi ağınızı seçin (sinyal % olarak yazar). İnternet istemezseniz [İnternetsiz kullan]; internete sonra Ayarlar > İnternet/TG’den bağlanabilirsiniz.';return h+'<div>Ağ seçin</div>'+B('net:Ana_WiFi','Ana_WiFi  %'+Math.min(100,pct()+10))+R((S.re?'':B('offline','İnternetsiz kullan'))+B('sback','⬅ Geri'))}
@@ -598,7 +604,7 @@ function scr(){var h=hdr(),H='',p;
  if(sc=='unew'){hintT='Şifre sıfırlandı (geçici 0000). Yeni üretici şifresini belirleyin.';return h+'<div>Yeni üretici şifresi</div><input id="npw" type="password" placeholder="yeni şifre" style="width:140px"><div class="mut" style="color:#ffb4ab">'+S.pwm+'</div>'+R(B('npwgo','Kaydet','p')+B('gset','⬅ Geri'))}
  if(sc=='uret'){hintT='Üretici ayarları (Murat Bey): kuluçka sürerken değiştirilemez. Burada seçilen donanıma göre müşterinin menüleri değişir. Viyol de burada ayarlanır.';return h+'<div class="mut">'+(S.mode?'Kuluçka sürerken değiştirilemez.':'Cihazın donanımı')+'</div>'+R('<span>Isıtıcı:</span>'+B('u:h1','1',S.hw.heat==1?'on':'')+B('u:h2','2',S.hw.heat==2?'on':''))+R('<span>Sensör:</span>'+B('u:s1','1',S.hw.sens==1?'on':'')+B('u:s2','2',S.hw.sens==2?'on':'')+B('u:s3','3',S.hw.sens==3?'on':''))+R('<span>Soğutma fanı:</span>'+B('u:fan',S.hw.fan?'VAR':'YOK',S.hw.fan?'on':''))+R('<span>Su pompası:</span>'+B('u:pump',S.hw.pump?'VAR':'YOK',S.hw.pump?'on':''))+R('<span>Kabin ışığı:</span>'+B('u:kab',S.hw.kab?'VAR':'YOK',S.hw.kab?'on':''))+R('<span>Kontrol ışığı:</span>'+B('u:kon',S.hw.kon?'VAR':'YOK',S.hw.kon?'on':''))+R('<span>Viyol:</span>'+B('u:v1','Model 1',S.viy==1?'on':'')+B('u:v2','Model 2',S.viy==2?'on':''))+(S.viy==2?R('<span>2 saatte bir çalışma süresi:</span>'+B('u:vm','-5')+'<b>'+S.viyS+' sn</b>'+B('u:vp','+5')):'<div class="mut">Model 1: yavaş motor (örnek 1/240 dev/dk), kendi zamanlayıcısı var.</div>')+'<div class="mut">Son yeniden başlamalar: '+(S.rlog.slice(-3).join(' · ')||'yok')+'</div>'+R(B('gset','⬅ Geri'))}
  if(sc=='isik'){hintT='Işıklar: aç ve kapat aynı düğmeyle.';return h+R((S.hw.kab?B('kab','Kabin ışığı: '+(S.kab?'AÇIK':'kapalı'),S.kab?'on':''):'')+(S.hw.kon?B('kon','Kontrol ışığı: '+(S.kon?'AÇIK':'kapalı'),S.kon?'on':''):''))+R(B('back','⬅ Geri'))}
- p=phase();hintT=S.mode=='ozel'?'Özel mod sürüyor: değerler sizin belirlediğiniz gibi çalışır, güvenlik korumaları her zaman açıktır. Süresiz modu [İptal] ile bitirirsiniz.':!S.mode?'Ana ekran. [Yeni kuluçka] ile başlayın. Telegram’da /baslat da yazabilirsiniz.':p==1?'Gelişim sürecinde yalnız yumurta sayısı değişir. Çıkıma 3 gün kala [Onayla] gelir, süre dolunca [Ek süre]/[Şimdi bitir]. Altaki çipler çalışan çıkışları yeşil gösterir; cihazda olmayan donanım hiç görünmez. Bir çipe dokunursanız o çıkış elle açılır/kapanır (önce onay sorar): kapalı çıkış 30 dk, açık çıkış 2 dk sonra otomatiğe döner; 10 dk\'da bir mesaj ve bip gelir, güvenlik alarmları her zaman açıktır. Telegram’da /elle komutu aynı işi yapar.':p==2?'Çıkım dönemi: yumurtaları çıkış sepetine alın ve [Onayla]ya basın; basana kadar saatte bir hatırlatma gelir.':'Süre doldu: [Ek süre +12s] (bir kez) veya [Şimdi bitir].';
+ p=phase();hintT=S.mode=='ozel'?'Özel mod sürüyor: değerler sizin belirlediğiniz gibi çalışır, güvenlik korumaları her zaman açıktır. Süresiz modu [İptal] ile bitirirsiniz.':!S.mode?'Ana ekran. [Yeni kuluçka] ile başlayın. Telegram’da /baslat da yazabilirsiniz.':p==1?'Gelişim sürecinde yalnız yumurta sayısı değişir. Çıkıma 3 gün kala [Onayla] gelir, süre dolunca [Ek süre]/[Şimdi bitir]. Altaki çipler çalışan çıkışları yeşil gösterir; cihazda olmayan donanım hiç görünmez. Bir çipe dokunursanız o çıkış manuel açılır/kapanır (önce onay sorar): kapalı çıkış 30 dk, açık çıkış 2 dk sonra otomatiğe döner; 10 dk\'da bir mesaj gelir ve alarm öter, güvenlik alarmları her zaman açıktır. Telegram’da /manuel komutu aynı işi yapar.':p==2?'Çıkım dönemi: yumurtaları çıkış sepetine alın ve [Onayla]ya basın; basana kadar saatte bir hatırlatma gelir.':'Süre doldu: [Ek süre +12s] (bir kez) veya [Şimdi bitir].';
  var tb=S.hw.heat==2?'<div class="row" style="gap:14px"><div><div class="mut">Bölge 1 · anlık</div><div class="big" style="font-size:28px">'+f(dsp(0))+'°C</div></div><div><div class="mut">Bölge 2 · anlık</div><div class="big" style="font-size:28px">'+f(dsp(1))+'°C</div></div></div>':'<div class="mut">Anlık sıcaklık</div><div class="big">'+f(avg())+'°C</div>';
  H='<div class="row hd" style="justify-content:space-between;align-items:flex-start;flex-wrap:nowrap"><div>'+tb+'<div class="mut">Anlık nem %'+dh()+'</div></div><div style="text-align:right">'+(S.mode?ph(S.mode,44)+'<div style="font-size:16px">'+TN[S.mode]+'</div><div>'+dT()+'</div>'+(S.mode=='ozel'?'':'<div class="mut">Yumurta '+S.eggs+'</div>')+'<div class="mut">🎯 Hedef '+f(tgtT())+'°C · nem %'+tgtH()+'</div>':'<div class="mut">Aktif kuluçka yok</div>')+'</div></div>';
  if(S.mode)H+=chips()+timeBar()+manBanner();
@@ -687,7 +693,7 @@ function act(a){window._src=1;var q=a.split(':');S.tm='';if($('nn')){S.nn=$('nn'
  else if(a=='bitir'){L('Kuluçka bitirildi');endRun('bitti');S.mode=null;say('🏁 Ekrandan kuluçka bitirildi.')}
  else if(a=='sog'){if(S.cool){S.cool=0;say('❄ Soğutma durdu.')}else{var e=coolStart(0);if(e)S.tm=e;else say('❄ Ekrandan soğutma başladı (en fazla 30 dk). Alarmlar 1 saat susturuldu.')}}
  else if(a=='sul'){var e3=pumpOn()?'Sulama zaten çalışıyor.':pumpRun(0);if(e3)S.tm=e3;else{S.tm='Pompa '+pumpS()+' saniye çalışacak.';say('💦 Ekrandan sulama başladı: pompa '+pumpS()+' saniye çalışacak. Alarmlar 1 saat susturuldu.')}}
- else if(a=='sus'){if(alarm()){S.sus=1;say('🔇 Ekrandan siren susturuldu. Alarm sürerse 30 dk sonra yeniden çalar.')}}
+ else if(a=='sus'){if(alarm()){S.sus=1;S.sirenUntil=0;say('🔇 Ekrandan siren susturuldu. Alarm sürerse 30 dk sonra yeniden çalar.')}}
  else if(a=='normal'){S.safe=0;S.hits=[];L('Güvenli Mod kapatıldı');say('✅ Ekrandan normale dönüldü.')}
  else if(a=='iptal')S.iq=1;else if(a=='iptal2'){L('Kuluçka iptal edildi');endRun('iptal');S.mode=null;S.iq=0;say('❌ Ekrandan kuluçka iptal edildi.')}else if(a=='iptal0')S.iq=0;
  draw()}
@@ -767,7 +773,7 @@ function advance(m){if(m>1440)S.ff=1;S.cntC=0;S.cntP=0;for(var i=0;i<m;i++)step(
 function setTemp(v){S.temp=v;if(S.pw)alarms();draw()}
 function doPower(){if(S.pw){S.pw=0;S.man={};S.mq=null;S.pwAt=S.now;L('Elektrik kesildi')}else{S.pw=1;var dur=S.now-S.pwAt;S.alHi=0;S.alLo=0;S.lock=0;S.I=0;S.cool=0;if(S.mode){var el=S.now-S.t0,T=TOT[S.mode];S.day=Math.floor(el/1440)+1;if(S.day>T)S.day=S.ek?T+1:T;if(el>=T*1440)S.fin=1}L('Elektrik geldi (kesinti '+dur+' dk)');say('⚡ Elektrik geldi. Kesinti süresi '+dur+' dk. Cihaz yeniden başladı. Sıcaklık '+f(S.temp)+'°C.');alarms()}draw()}
 function togglePlay(){if(playT){clearInterval(playT);playT=null}else playT=setInterval(function(){advance(15)},400);drawScr()}
-function cmList(){var l=isAdm()?['/durum','/canli','/kulucka','/baslat','/ozel','/yumurta','/isik','/sogut','/sula','/sustur','/onayla','/ek_sure','/elle','/bitir','/iptal','/gecmis','/kisiler','/viyol','/gun_ayarla','/yeniden_baslat','/roller','/yardimci_ekle','/izleyici_ekle','/admin_ekle','/kisi_cikar','/wifi_ekle','/wifi_sil','/token_guncelle','/ag','/kalibrasyon','/kilavuz','/iletisim','/destek','/destek_ac','/destek_kapat','/kurutma','/kurutma_durdur'].concat(S.role=='Destek'?['/guncelle','/uretici_sifre_sifirla','/kara_kutu','/cihaz_bilgi']:[]):S.role=='Yardımcı'?['/durum','/canli','/kulucka','/kurutma','/kurutma_durdur','/baslat','/ozel','/yumurta','/isik','/sogut','/sula','/sustur','/onayla','/ek_sure','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek']:['/durum','/canli','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek'];var h='';l.forEach(function(x){h+='<button data-c="'+x+'">'+x+'</button>'});return h}
+function cmList(){var l=isAdm()?['/durum','/canli','/kulucka','/baslat','/ozel','/yumurta','/isik','/sogut','/sula','/sustur','/onayla','/ek_sure','/manuel','/bitir','/iptal','/gecmis','/kisiler','/viyol','/gun_ayarla','/yeniden_baslat','/roller','/yardimci_ekle','/izleyici_ekle','/admin_ekle','/kisi_cikar','/wifi_ekle','/wifi_sil','/token_guncelle','/ag','/kalibrasyon','/kilavuz','/iletisim','/destek','/destek_ac','/destek_kapat','/kurutma','/kurutma_durdur'].concat(S.role=='Destek'?['/guncelle','/uretici_sifre_sifirla','/kara_kutu','/cihaz_bilgi']:[]):S.role=='Yardımcı'?['/durum','/canli','/kulucka','/kurutma','/kurutma_durdur','/baslat','/ozel','/yumurta','/isik','/sogut','/sula','/sustur','/onayla','/ek_sure','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek']:['/durum','/canli','/gecmis','/kisiler','/roller','/kilavuz','/iletisim','/destek'];var h='';l.forEach(function(x){h+='<button data-c="'+x+'">'+x+'</button>'});return h}
 $('scr').addEventListener('pointerdown',function(){lastTouch=Date.now();if(window._sleep){window._sleep=0;window._eat=1;drawScr()}},true);
 $('scr').addEventListener('click',function(e){if(window._eat){window._eat=0;e.stopPropagation();e.preventDefault()}},true);
 setInterval(function(){if(typeof S==='undefined'||!S||S.st<4)return;if(!window._sleep&&!playT&&Date.now()-lastTouch>SLEEP_MS){window._sleep=1;drawScr()}},1000);
@@ -781,7 +787,7 @@ $('slash').onclick=function(){var m=$('cm');if(m.style.display=='flex'){m.style.
 $('snd').onclick=send;$('inp').onkeydown=function(e){if(e.key=='Enter')send()};
 $('t10').onclick=function(){advance(10)};$('t60').onclick=function(){advance(60)};$('t1d').onclick=function(){advance(1440)};$('t3d').onclick=function(){advance(4320)};
 $('tcik').onclick=function(){if(!S.mode){say('Aktif kuluçka yok.');draw();return}if(S.mode=='ozel'&&!S.cu.days){say('Süresiz modda çıkım dönemi yok. Zamanı ilerletmek için +1 gün düğmesini kullanın.');draw();return}var T=TOT[S.mode],H=HD()||1,tgt=S.t0+(T-H)*1440+1;if(tgt<=S.now)tgt=S.now+60;advance(tgt-S.now)};
-$('tplay').onclick=togglePlay;
+$('tplay').onclick=togglePlay;$('snd_t').onclick=sndToggle;
 $('e_door').onclick=function(){S.door=S.door?0:1;L(S.door?'Kapı açıldı':'Kapı kapandı');draw()};
 $('e_pw').onclick=doPower;$('e_rst').onclick=doReset;
 $('e_ssr').onclick=function(){S.ssr=S.ssr?0:1;draw()};
